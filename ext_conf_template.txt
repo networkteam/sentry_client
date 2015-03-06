@@ -1,0 +1,2 @@
+# cat=Sentry-Server/; type=text; label=DSN: http://public_key:secret_key@your-sentry-server.com/project-id
+dsn =
