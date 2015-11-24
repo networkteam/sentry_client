@@ -7,9 +7,9 @@ It's based on https://github.com/getsentry/raven-php
 
 Installation
 ------------
-	$ git clone --recursive https://github.com/networkteam/sentry_client.git typo3conf/ext/sentry_client
+	$ git clone --recursive https://github.com/networkteam/sentry_client.git
 
-	Install the extension in the Extension Manager
+It's also available in TER: http://typo3.org/extensions/repository/view/sentry_client
 
 Configuration
 -------------

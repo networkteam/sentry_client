@@ -4,17 +4,27 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
+function register_client() {
+	$ravenPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/raven/lib/Raven';
+	require_once($ravenPath . '/Autoloader.php');
+	\Raven_Autoloader::register();
+	$client = new \Lemming\SentryClient\Client();
+	$errorHandler = new Raven_ErrorHandler($client);
+	$errorHandler->registerExceptionHandler();
+	$errorHandler->registerErrorHandler();
+	$errorHandler->registerShutdownFunction();
+}
+
 if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client'])) {
 	$configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
 	if (isset($configuration['dsn']) && $configuration['dsn'] != '') {
-		$ravenPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/raven/lib/Raven';
-		require_once($ravenPath . '/Autoloader.php');
-		\Raven_Autoloader::register();
 
-		if ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['errors']['exceptionHandler'] === $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler']) {
-			$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['errors']['exceptionHandler'] = 'Lemming\\SentryClient\\Handler\\ProductionExceptionHandler';
+		if (isset($configuration['productionOnly']) && (bool)$configuration['productionOnly'] === TRUE) {
+			if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
+				register_client();
+			}
 		} else {
-			$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['errors']['exceptionHandler'] = 'Lemming\\SentryClient\\Handler\\DebugExceptionHandler';
+			register_client();
 		}
 	}
 }

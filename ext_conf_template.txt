@@ -1,2 +1,4 @@
-# cat=Sentry-Server/; type=text; label=DSN: http://public_key:secret_key@your-sentry-server.com/project-id
+# cat=Sentry/; type=text; label=DSN: http://public_key:secret_key@your-sentry-server.com/project-id
 dsn =
+# cat=Sentry/; type=boolean; label=Report exceptions in production context only
+productionOnly = 1

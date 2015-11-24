@@ -16,10 +16,13 @@ class Client extends \Raven_Client {
 	 * Log an exception to sentry
 	 */
 	public function captureException($exception, $culprit_or_options = NULL, $logger = NULL, $vars = NULL) {
+		$production = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction();
+
 		$this->tags_context(array(
 			'typo3_version' => TYPO3_version,
 			'typo3_mode' => TYPO3_MODE,
 			'php_version' => phpversion(),
+			'application_context' => $production === TRUE ? 'Production' : 'Development',
 		));
 
 		$userContext = array();
