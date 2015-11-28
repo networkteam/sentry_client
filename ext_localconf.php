@@ -9,7 +9,7 @@ function register_client() {
 	require_once($ravenPath . '/Autoloader.php');
 	\Raven_Autoloader::register();
 	$client = new \Lemming\SentryClient\Client();
-	$errorHandler = new Raven_ErrorHandler($client);
+	$errorHandler = new Raven_ErrorHandler($client, TRUE);
 	$errorHandler->registerExceptionHandler();
 	$errorHandler->registerShutdownFunction();
 }
