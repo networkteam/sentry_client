@@ -11,7 +11,6 @@ function register_client() {
 	$client = new \Lemming\SentryClient\Client();
 	$errorHandler = new Raven_ErrorHandler($client);
 	$errorHandler->registerExceptionHandler();
-	$errorHandler->registerErrorHandler();
 	$errorHandler->registerShutdownFunction();
 }
 
