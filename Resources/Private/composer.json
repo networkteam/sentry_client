@@ -1,0 +1,9 @@
+{
+    "name": "networkteam/sentry_client",
+    "config": {
+        "vendor-dir": "Libraries"
+    },
+    "require": {
+        "sentry/sentry": "dev-master"
+    }
+}
