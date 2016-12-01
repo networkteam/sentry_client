@@ -4,14 +4,16 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
-function register_client() {
-	$ravenPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/raven/lib/Raven';
-	require_once($ravenPath . '/Autoloader.php');
-	\Raven_Autoloader::register();
-	$client = new \Lemming\SentryClient\Client();
-	$errorHandler = new Raven_ErrorHandler($client, TRUE);
-	$errorHandler->registerExceptionHandler();
-	$errorHandler->registerShutdownFunction();
+if (!function_exists('register_client')) {
+	function register_client() {
+		$ravenPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/raven/lib/Raven';
+		require_once($ravenPath . '/Autoloader.php');
+		\Raven_Autoloader::register();
+		$client = new \Lemming\SentryClient\Client();
+		$errorHandler = new Raven_ErrorHandler($client, TRUE);
+		$errorHandler->registerExceptionHandler();
+		$errorHandler->registerShutdownFunction();
+	}
 }
 
 if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client'])) {
