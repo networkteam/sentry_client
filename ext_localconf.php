@@ -6,9 +6,10 @@ if (!defined('TYPO3_MODE')) {
 
 if (!function_exists('register_client')) {
 	function register_client() {
-		$ravenPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/raven/lib/Raven';
-		require_once($ravenPath . '/Autoloader.php');
-		\Raven_Autoloader::register();
+		$autoloadPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/autoload.php';
+		if (is_readable($autoloadPath)) {
+			require_once $autoloadPath;
+		}
 		$client = new \Lemming\SentryClient\Client();
 		$errorHandler = new Raven_ErrorHandler($client, TRUE);
 		$errorHandler->registerExceptionHandler();

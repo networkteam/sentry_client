@@ -1,0 +1,19 @@
+{
+  "name": "networkteam/sentry_client",
+  "description": "Sentry Client for TYPO3",
+  "minimum-stability": "dev",
+  "license": "LGPL-3.0",
+  "authors": [
+    {
+      "name": "Christoph Lehmann",
+      "email": "christoph.lehmann@networkteam.com"
+    },
+    {
+      "name": "Michael Grundkötter",
+      "email": "mg@ujamii.com"
+    }
+  ],
+  "require": {
+    "sentry/sentry": "1.6.x"
+  }
+}
