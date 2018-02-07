@@ -4,7 +4,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Sentry Client',
 	'description' => 'Sentry Client for TYPO3 - https://www.getsentry.com/',
 	'category' => 'services',
-	'version' => '1.1.0',
+	'version' => '1.2.0',
 	'state' => 'stable',
 	'uploadfolder' => false,
 	'createDirs' => '',
@@ -16,7 +16,7 @@ $EM_CONF[$_EXTKEY] = array(
 		array(
 			'depends' =>
 				array(
-					'typo3' => '7.6.0-7.6.99',
+					'typo3' => '8.7.0-8.7.99',
 				),
 			'conflicts' =>
 				array(),
