@@ -1,10 +1,10 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = array (
+$EM_CONF[$_EXTKEY] = array(
 	'title' => 'Sentry Client',
 	'description' => 'Sentry Client for TYPO3 - https://www.getsentry.com/',
 	'category' => 'services',
-	'version' => '1.0.3',
+	'version' => '1.1.0',
 	'state' => 'stable',
 	'uploadfolder' => false,
 	'createDirs' => '',
@@ -12,17 +12,15 @@ $EM_CONF[$_EXTKEY] = array (
 	'author' => 'Christoph Lehmann',
 	'author_email' => 'christoph.lehmann@networkteam.com',
 	'author_company' => 'networkteam GmbH',
-	'constraints' => 
-	array (
-		'depends' => 
-		array (
-			'typo3' => '6.2.0-8.7.99',
+	'constraints' =>
+		array(
+			'depends' =>
+				array(
+					'typo3' => '7.6.0-7.6.99',
+				),
+			'conflicts' =>
+				array(),
+			'suggests' =>
+				array(),
 		),
-		'conflicts' => 
-		array (
-		),
-		'suggests' => 
-		array (
-		),
-	),
 );
