@@ -1,0 +1,48 @@
+{
+  "name": "networkteam/sentry-client",
+  "description": "Sentry Client for TYPO3",
+  "type": "typo3-cms-extension",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "sentry",
+    "error-reporting"
+  ],
+  "support": {
+    "issues": "https://github.com/networkteam/sentry_client"
+  },
+  "minimum-stability": "dev",
+  "homepage": "https://networkteam.com",
+  "license": [
+    "GPL-2.0-or-later"
+  ],
+  "authors": [
+    {
+      "name": "Christoph Lehmann",
+      "email": "christoph.lehmann@networkteam.com"
+    }
+  ],
+  "require": {
+    "sentry/sentry": "0.10.*",
+    "typo3/cms-core": "^8.7"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "sentry_client"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Networkteam\\SentryClient\\": "Classes/"
+    }
+  },
+  "replace": {
+    "sentry_client": "self.version",
+    "typo3-ter/sentry-client": "self.version"
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms"
+    }
+  }
+}

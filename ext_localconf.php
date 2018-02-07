@@ -6,10 +6,14 @@ if (!defined('TYPO3_MODE')) {
 
 if (!function_exists('register_client')) {
 	function register_client() {
-		$ravenPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/raven/lib/Raven';
-		require_once($ravenPath . '/Autoloader.php');
+
+		$autoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/autoload.php';
+		if (file_exists($autoloadFile)) {
+			require_once($autoloadFile);
+		}
+
 		\Raven_Autoloader::register();
-		$GLOBALS['USER']['sentryClient'] = new \Lemming\SentryClient\Client();
+		$GLOBALS['USER']['sentryClient'] = new \Networkteam\SentryClient\Client();
 		$errorHandler = new Raven_ErrorHandler($GLOBALS['USER']['sentryClient'], TRUE);
 		$errorHandler->registerExceptionHandler();
 		$errorHandler->registerShutdownFunction();

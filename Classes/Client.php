@@ -1,5 +1,5 @@
 <?php
-namespace Lemming\SentryClient;
+namespace Networkteam\SentryClient;
 
 class Client extends \Raven_Client {
 
