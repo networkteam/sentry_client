@@ -1,8 +1,5 @@
 <?php
 
-use Networkteam\SentryClient\Service\ConfigurationService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
@@ -29,10 +26,9 @@ if (!function_exists('register_client')) {
 	}
 }
 
-
-if (ConfigurationService::getDsn() !== '') {
-	if (GeneralUtility::getApplicationContext()->isProduction()) {
-		if (ConfigurationService::isProductionOnly()) {
+if (\Networkteam\SentryClient\Service\ConfigurationService::getDsn() !== '') {
+	if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
+		if (\Networkteam\SentryClient\Service\ConfigurationService::isProductionOnly()) {
 			register_client();
 		}
 	} else {

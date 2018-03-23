@@ -10,7 +10,6 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 	const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'pageNotFoundHandlingActive';
 
 	/**
-	 * @param string $key Configuration key with dot notation (foo.bar.batz)
 	 * @return mixed|null null is returned for $key not available in extension configuration
 	 */
 	protected static function getExtensionConfiguration($key) {
@@ -34,14 +33,16 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 	 * @return bool
 	 */
 	public static function isProductionOnly() {
-		return (bool)self::getExtensionConfiguration(self::PRODUCTION_ONLY);
+		$value = self::getExtensionConfiguration(self::PRODUCTION_ONLY);
+		return $value === null ?: $value;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public static function isPageNotFoundHandlingActive() {
-		return (bool)self::getExtensionConfiguration(self::PAGE_NOT_FOUND_HANDLING_ACTIVE);
+		$value = self::getExtensionConfiguration(self::PAGE_NOT_FOUND_HANDLING_ACTIVE);
+		return $value === null ?: $value;
 	}
 
 }

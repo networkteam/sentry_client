@@ -19,7 +19,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
 	 * @throws \Exception
 	 */
 	public function handle(\Exception $exception, AbstractContentObject $contentObject = null, $contentObjectConfiguration = []) {
-		if (ConfigurationService::isPageNotFoundHandlingActive() && $exception instanceof PageNotFoundException) {
+		if ($exception instanceof PageNotFoundException && ConfigurationService::isPageNotFoundHandlingActive()) {
 			$this->pageNotFoundAndExit($exception, $contentObject);
 			// script dies here
 		}
@@ -37,7 +37,6 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
 			$currentRecord = $contentObject->getContentObjectRenderer()->currentRecord;
 		}
 
-		$header = $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFound_handling_statheader'];
 		$reason = trim(sprintf(
 			'%s: %s (code %s). %s',
 			$exception->getTitle(),
@@ -45,7 +44,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
 			$exception->getCode(),
 			$currentRecord ? 'Caused by record ' . $currentRecord : ''
 		));
-		$GLOBALS['TSFE']->pageNotFoundAndExit($reason, $header);
+		$GLOBALS['TSFE']->pageNotFoundAndExit($reason);
 		// script dies here
 	}
 }

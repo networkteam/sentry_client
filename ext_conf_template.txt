@@ -2,5 +2,5 @@
 dsn =
 # cat=Sentry/; type=boolean; label=Report exceptions in production context only
 productionOnly = 1
-# cat=Sentry/; type=boolean; label=PageNotFoundException triggers pageNotFound_handling (See docs of ['TYPO3_CONF_VARS']['FE']['pageNotFound_handling']). The PageNotFoundException will not be handled by Sentry client.
-pageNotFoundHandlingActive = 1
+# cat=Sentry/; type=boolean; label=Ignore PageNotFoundException and trigger 404 handling instead
+activatePageNotFoundHandlingActive = 1
