@@ -10,6 +10,12 @@ The extension is a wrapper for https://github.com/getsentry/sentry-php
 $ composer require networkteam/sentry-client
 ```
 
+After installation via composer the configuration setup has to be run.
+
+```bash
+$ vendor/bin/typo3cms extension:setup sentry_client
+```
+
 It's also available in TER: http://typo3.org/extensions/repository/view/sentry_client
 
 ## Configuration

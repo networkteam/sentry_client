@@ -28,7 +28,8 @@
   },
   "extra": {
     "typo3/cms": {
-      "extension-key": "sentry_client"
+      "extension-key": "sentry_client",
+      "cms-package-dir": "{$vendor-dir}/typo3/cms"
     }
   },
   "autoload": {
@@ -39,10 +40,5 @@
   "replace": {
     "sentry_client": "self.version",
     "typo3-ter/sentry-client": "self.version"
-  },
-  "extra": {
-    "typo3/cms": {
-      "cms-package-dir": "{$vendor-dir}/typo3/cms"
-    }
   }
 }

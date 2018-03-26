@@ -15,7 +15,7 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 	protected static function getExtensionConfiguration($key) {
 		$extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
 
-		if (array_key_exists($key, $extensionConfiguration)) {
+		if (is_array($extensionConfiguration) && array_key_exists($key, $extensionConfiguration)) {
 			return $extensionConfiguration[$key];
 		} else {
 			return null;
