@@ -2,3 +2,5 @@
 dsn =
 # cat=Sentry/; type=boolean; label=Report exceptions in production context only
 productionOnly = 1
+# cat=Sentry/; type=boolean; label=Ignore PageNotFoundException and trigger 404 handling instead
+activatePageNotFoundHandlingActive = 1

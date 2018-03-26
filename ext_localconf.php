@@ -26,16 +26,12 @@ if (!function_exists('register_client')) {
 	}
 }
 
-if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client'])) {
-	$configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
-	if (isset($configuration['dsn']) && $configuration['dsn'] != '') {
-
-		if (isset($configuration['productionOnly']) && (bool)$configuration['productionOnly'] === TRUE) {
-			if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
-				register_client();
-			}
-		} else {
+if (\Networkteam\SentryClient\Service\ConfigurationService::getDsn() !== '') {
+	if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
+		if (\Networkteam\SentryClient\Service\ConfigurationService::isProductionOnly()) {
 			register_client();
 		}
+	} else {
+		register_client();
 	}
 }
