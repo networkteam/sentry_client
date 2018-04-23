@@ -25,26 +25,6 @@ class Client extends \Raven_Client {
 			'application_context' => $production === TRUE ? 'Production' : 'Development',
 		));
 
-		$userContext = array();
-		switch (TYPO3_MODE) {
-			case 'FE':
-				if ($GLOBALS['TSFE']->loginUser === TRUE) {
-					$userContext['username'] = $GLOBALS['TSFE']->fe_user->user['username'];
-					if (isset($GLOBALS['TSFE']->fe_user->user['email'])) {
-						$userContext['email'] = $GLOBALS['TSFE']->fe_user->user['email'];
-					}
-				}
-				break;
-			case 'BE':
-				if (isset($GLOBALS['BE_USER']->user['username'])) {
-					$userContext['username'] = $GLOBALS['BE_USER']->user['username'];
-					if (isset($GLOBALS['BE_USER']->user['email'])) {
-						$userContext['email'] = $GLOBALS['BE_USER']->user['email'];
-					}
-				}
-		}
-		$this->user_context($userContext);
-
 		return parent::captureException($exception, $culprit_or_options, $logger, $vars);
 	}
 }
