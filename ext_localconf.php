@@ -27,11 +27,11 @@ if (!function_exists('register_client')) {
 }
 
 if (\Networkteam\SentryClient\Service\ConfigurationService::getDsn() !== '') {
-	if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
-		if (\Networkteam\SentryClient\Service\ConfigurationService::isProductionOnly()) {
-			register_client();
-		}
-	} else {
-		register_client();
-	}
+    if (\Networkteam\SentryClient\Service\ConfigurationService::isProductionOnly()) {
+        if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
+            register_client();
+        }
+    } else {
+        register_client();
+    }
 }
