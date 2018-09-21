@@ -9,10 +9,6 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 
 	const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'pageNotFoundHandlingActive';
 
-	const IGNORE_BACKEND_REQUEST = 'ignoreBackendRequests';
-
-	const IGNORE_FRONTEND_REQUEST = 'ignoreFrontendRequests';
-
 	const REPORT_BACKENDUSER_INFORMATION = 'reportBackenduserInformation';
 
 	const REPORT_FRONTENDUSER_INFORMATION = 'reportFrontenduserInformation';
