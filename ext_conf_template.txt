@@ -4,3 +4,7 @@ dsn =
 productionOnly = 1
 # cat=Sentry/; type=boolean; label=Ignore PageNotFoundException and trigger 404 handling instead
 activatePageNotFoundHandlingActive = 1
+# cat=Sentry/; type=boolean; label=Report backend user information
+reportBackenduserInformation = 1
+# cat=Sentry/; type=boolean; label=Report frontend user information
+reportFrontenduserInformation = 1
