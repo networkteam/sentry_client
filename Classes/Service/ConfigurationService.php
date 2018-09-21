@@ -9,6 +9,14 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 
 	const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'pageNotFoundHandlingActive';
 
+	const IGNORE_BACKEND_REQUEST = 'ignoreBackendRequests';
+
+	const IGNORE_FRONTEND_REQUEST = 'ignoreFrontendRequests';
+
+	const REPORT_BACKENDUSER_INFORMATION = 'reportBackenduserInformation';
+
+	const REPORT_FRONTENDUSER_INFORMATION = 'reportFrontenduserInformation';
+
 	/**
 	 * @return mixed|null null is returned for $key not available in extension configuration
 	 */
@@ -44,5 +52,21 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 		$value = self::getExtensionConfiguration(self::PAGE_NOT_FOUND_HANDLING_ACTIVE);
 		return $value === null ?: $value;
 	}
+
+	/**
+	 * @return bool
+	 */
+	public static function isReportBackenduserInformation() {
+		$value = self::getExtensionConfiguration(self::REPORT_BACKENDUSER_INFORMATION);
+		return $value === null ?: $value;
+    }
+
+	/**
+	 * @return bool
+	 */
+	public static function isReportFrontenduserInformation() {
+		$value = self::getExtensionConfiguration(self::REPORT_FRONTENDUSER_INFORMATION);
+		return $value === null ?: $value;
+    }
 
 }
