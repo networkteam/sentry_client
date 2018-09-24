@@ -6,16 +6,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
 {
-
     const DSN = 'dsn';
 
     const PRODUCTION_ONLY = 'productionOnly';
 
     const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'pageNotFoundHandlingActive';
-
-    const IGNORE_BACKEND_REQUEST = 'ignoreBackendRequests';
-
-    const IGNORE_FRONTEND_REQUEST = 'ignoreFrontendRequests';
 
     const REPORT_USER_INFORMATION = 'reportUserInformation';
 
@@ -26,7 +21,6 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     const USER_INFORMATION_USERNAMEEMAIL = 'usernameandemail';
 
     const REPORT_WITH_DEV_IP = 'reportWithDevIP';
-
 
     /**
      * @retun bool
