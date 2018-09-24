@@ -13,9 +13,13 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 
 	const IGNORE_FRONTEND_REQUEST = 'ignoreFrontendRequests';
 
-	const REPORT_BACKENDUSER_INFORMATION = 'reportBackenduserInformation';
+	const REPORT_USER_INFORMATION = 'reportUserInformation';
 
-	const REPORT_FRONTENDUSER_INFORMATION = 'reportFrontenduserInformation';
+	const USER_INFORMATION_NONE = 'none';
+
+	const USER_INFORMATION_USERID = 'userid';
+
+	const USER_INFORMATION_USERNAMEEMAIL = 'usernameandemail';
 
 	/**
 	 * @return mixed|null null is returned for $key not available in extension configuration
@@ -54,19 +58,20 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 	/**
-	 * @return bool
+	 * @return string
 	 */
-	public static function isReportBackenduserInformation() {
-		$value = self::getExtensionConfiguration(self::REPORT_BACKENDUSER_INFORMATION);
-		return $value === null ?: $value;
-    }
-
-	/**
-	 * @return bool
-	 */
-	public static function isReportFrontenduserInformation() {
-		$value = self::getExtensionConfiguration(self::REPORT_FRONTENDUSER_INFORMATION);
-		return $value === null ?: $value;
-    }
+	public static function getReportUserInformation() {
+		$value = self::getExtensionConfiguration(self::REPORT_USER_INFORMATION);
+		switch($value) {
+			case self::USER_INFORMATION_NONE:
+				return $value;
+			case self::USER_INFORMATION_USERID:
+				return $value;
+			case self::USER_INFORMATION_USERNAMEEMAIL:
+				return $value;
+			default:
+				return self::USER_INFORMATION_USERID;
+		}
+	}
 
 }
