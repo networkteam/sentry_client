@@ -2,6 +2,8 @@
 dsn =
 # cat=Sentry/; type=boolean; label=Report exceptions in production context only
 productionOnly = 1
+# cat=Sentry/; type=boolean; label=Report exceptions when $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask'] matches client ip
+reportWithDevIP = 0
 # cat=Sentry/; type=boolean; label=Ignore PageNotFoundException and trigger 404 handling instead
 activatePageNotFoundHandlingActive = 1
 # cat=Sentry/; type=options[none,userid,usernameandemail]; label=Report user information

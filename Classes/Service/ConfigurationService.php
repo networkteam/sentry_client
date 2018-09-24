@@ -2,6 +2,8 @@
 
 namespace Networkteam\SentryClient\Service;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
 {
 
@@ -22,6 +24,30 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     const USER_INFORMATION_USERID = 'userid';
 
     const USER_INFORMATION_USERNAMEEMAIL = 'usernameandemail';
+
+    const REPORT_WITH_DEV_IP = 'reportWithDevIP';
+
+
+    /**
+     * @retun bool
+     */
+    public static function registerClient()
+    {
+        if (self::getDsn() === '') {
+            return false;
+        }
+
+        if (self::isProductionOnly() && !GeneralUtility::getApplicationContext()->isProduction()) {
+            return false;
+        }
+
+        $ipMatchesDevelopmentSystem = GeneralUtility::cmpIP(GeneralUtility::getIndpEnv('REMOTE_ADDR'), $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
+        if (!self::reportWithDevIP() && $ipMatchesDevelopmentSystem) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * @return mixed|null null is returned for $key not available in extension configuration
@@ -79,6 +105,15 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
             default:
                 return self::USER_INFORMATION_USERID;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public static function reportWithDevIP()
+    {
+        $value = self::getExtensionConfiguration(self::REPORT_WITH_DEV_IP);
+        return $value === null ? false : $value;
     }
 
 }

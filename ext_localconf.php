@@ -7,6 +7,9 @@ if (!defined('TYPO3_MODE')) {
 if (!function_exists('register_client')) {
     function register_client()
     {
+        if (!\Networkteam\SentryClient\Service\ConfigurationService::registerClient()) {
+            return;
+        }
 
         $autoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/autoload.php';
         if (file_exists($autoloadFile)) {
@@ -27,12 +30,4 @@ if (!function_exists('register_client')) {
     }
 }
 
-if (\Networkteam\SentryClient\Service\ConfigurationService::getDsn() !== '') {
-    if (\Networkteam\SentryClient\Service\ConfigurationService::isProductionOnly()) {
-        if (\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
-            register_client();
-        }
-    } else {
-        register_client();
-    }
-}
+register_client();
