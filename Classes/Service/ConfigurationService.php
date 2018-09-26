@@ -71,7 +71,7 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     public static function isProductionOnly()
     {
         $value = self::getExtensionConfiguration(self::PRODUCTION_ONLY);
-        return $value === null ?: $value;
+        return $value === null ?: (bool)$value;
     }
 
     /**
@@ -80,7 +80,7 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     public static function isPageNotFoundHandlingActive()
     {
         $value = self::getExtensionConfiguration(self::PAGE_NOT_FOUND_HANDLING_ACTIVE);
-        return $value === null ?: $value;
+        return $value === null ?: (bool)$value;
     }
 
     /**
@@ -107,7 +107,7 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     public static function reportWithDevIP()
     {
         $value = self::getExtensionConfiguration(self::REPORT_WITH_DEV_IP);
-        return $value === null ? false : $value;
+        return $value === null ? false : (bool)$value;
     }
 
 }
