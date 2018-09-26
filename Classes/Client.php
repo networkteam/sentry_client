@@ -1,50 +1,56 @@
 <?php
+
 namespace Networkteam\SentryClient;
 
-class Client extends \Raven_Client {
+use Networkteam\SentryClient\Service\ConfigurationService;
 
-	public function __construct() {
-		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client'])) {
-			$configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
-			if (isset($configuration['dsn']) && $configuration['dsn'] != '') {
-				parent::__construct($configuration['dsn']);
-			}
-		}
-	}
+class Client extends \Raven_Client
+{
 
-	/**
-	 * Log an exception to sentry
-	 */
-	public function captureException($exception, $culprit_or_options = NULL, $logger = NULL, $vars = NULL) {
-		$production = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction();
+    public function __construct()
+    {
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client'])) {
+            $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
+            if (isset($configuration['dsn']) && $configuration['dsn'] != '') {
+                parent::__construct($configuration['dsn']);
+            }
+        }
+    }
 
-		$this->tags_context(array(
-			'typo3_version' => TYPO3_version,
-			'typo3_mode' => TYPO3_MODE,
-			'php_version' => phpversion(),
-			'application_context' => $production === TRUE ? 'Production' : 'Development',
-		));
+    /**
+     * Log an exception to sentry
+     */
+    public function captureException($exception, $culprit_or_options = null, $logger = null, $vars = null)
+    {
+        $production = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction();
 
-		$userContext = array();
-		switch (TYPO3_MODE) {
-			case 'FE':
-				if ($GLOBALS['TSFE']->loginUser === TRUE) {
-					$userContext['username'] = $GLOBALS['TSFE']->fe_user->user['username'];
-					if (isset($GLOBALS['TSFE']->fe_user->user['email'])) {
-						$userContext['email'] = $GLOBALS['TSFE']->fe_user->user['email'];
-					}
-				}
-				break;
-			case 'BE':
-				if (isset($GLOBALS['BE_USER']->user['username'])) {
-					$userContext['username'] = $GLOBALS['BE_USER']->user['username'];
-					if (isset($GLOBALS['BE_USER']->user['email'])) {
-						$userContext['email'] = $GLOBALS['BE_USER']->user['email'];
-					}
-				}
-		}
-		$this->user_context($userContext);
+        $this->tags_context(array(
+            'typo3_version' => TYPO3_version,
+            'typo3_mode' => TYPO3_MODE,
+            'application_context' => $production === true ? 'Production' : 'Development',
+        ));
 
-		return parent::captureException($exception, $culprit_or_options, $logger, $vars);
-	}
+        $reportUserInformation = ConfigurationService::getReportUserInformation();
+        if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE) {
+            $userContext = [];
+            if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE']->fe_user->user['username'])) {
+                $userObject = $GLOBALS['TSFE']->fe_user->user;
+            } elseif (isset($GLOBALS['BE_USER']->user['username'])) {
+                $userObject = $GLOBALS['BE_USER']->user;
+            }
+
+            if ($userObject) {
+                $userContext['userid'] = $userObject['uid'];
+                if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
+                    $userContext['username'] = $userObject['username'];
+                    if (isset($userContext['email'])) {
+                        $userContext['email'] = $userObject['email'];
+                    }
+                }
+                $this->user_context($userContext);
+            }
+        }
+
+        return parent::captureException($exception, $culprit_or_options, $logger, $vars);
+    }
 }
