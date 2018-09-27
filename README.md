@@ -22,6 +22,13 @@ It's also available in TER: http://typo3.org/extensions/repository/view/sentry_c
 
 Set the dsn (http://public_key:secret_key@your-sentry-server.com/project-id) in the Extension Manager and you are done.
 
+## Feature Toggles
+
+* Report exceptions in production context only
+* Report exceptions when `$GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']` matches client ip
+* Ignore PageNotFoundException and trigger 404 handling instead
+* Report user information: Select one of `none` | `userid` | `usernameandemail`
+
 ## Development
 
 You can use `$GLOBALS['USER']['sentryClient']` which is an instance of [\Raven_Client](https://github.com/getsentry/sentry-php/blob/master/lib/Raven/Client.php) to add your own tags or log messages.
