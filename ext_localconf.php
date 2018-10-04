@@ -7,6 +7,10 @@ if (!defined('TYPO3_MODE')) {
 if (!function_exists('register_client')) {
     function register_client()
     {
+        if (!class_exists(\Networkteam\SentryClient\Service\ConfigurationService::class)) {
+            return;
+        }
+
         if (!\Networkteam\SentryClient\Service\ConfigurationService::registerClient()) {
             return;
         }
