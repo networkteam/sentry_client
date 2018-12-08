@@ -22,12 +22,11 @@ class Client extends \Raven_Client
      */
     public function captureException($exception, $culprit_or_options = null, $logger = null, $vars = null)
     {
-        $production = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction();
 
         $this->tags_context(array(
             'typo3_version' => TYPO3_version,
             'typo3_mode' => TYPO3_MODE,
-            'application_context' => $production === true ? 'Production' : 'Development',
+            'application_context' => \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->__toString(),
         ));
 
         $reportUserInformation = ConfigurationService::getReportUserInformation();
