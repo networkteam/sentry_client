@@ -10,7 +10,7 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
 
     const PRODUCTION_ONLY = 'productionOnly';
 
-    const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'pageNotFoundHandlingActive';
+    const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'activatePageNotFoundHandlingActive';
 
     const REPORT_USER_INFORMATION = 'reportUserInformation';
 
