@@ -9,12 +9,7 @@ class Client extends \Raven_Client
 
     public function __construct()
     {
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client'])) {
-            $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
-            if (isset($configuration['dsn']) && $configuration['dsn'] != '') {
-                parent::__construct($configuration['dsn']);
-            }
-        }
+        parent::__construct(ConfigurationService::getDsn());
     }
 
     /**
