@@ -3,6 +3,7 @@
 namespace Networkteam\SentryClient\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Networkteam\SentryClient\Client;
 
 class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
 {
@@ -23,11 +24,11 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     const REPORT_WITH_DEV_IP = 'reportWithDevIP';
 
     /**
-     * @retun bool
+     * @return bool
      */
     public static function registerClient()
     {
-        if (self::getDsn() === '') {
+        if (!self::dsnIsParsable()) {
             return false;
         }
 
@@ -62,7 +63,22 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public static function getDsn()
     {
-        return (string)self::getExtensionConfiguration(self::DSN);
+        return trim((string)self::getExtensionConfiguration(self::DSN));
+    }
+
+    /**
+     * @return bool
+     */
+    public static function dsnIsParsable()  {
+        try {
+            if (empty(Client::parseDSN(self::getDsn()))) {
+                return false;
+            }
+        } catch (\Exception $ex) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
