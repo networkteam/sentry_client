@@ -3,6 +3,8 @@
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
+use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Client extends \Raven_Client
 {
@@ -52,5 +54,25 @@ class Client extends \Raven_Client
         }
 
         return parent::captureException($exception, $culprit_or_options, $logger, $vars);
+    }
+
+    /**
+     * Send the message over http to the sentry url given.
+     *
+     * Overwritten to use TYPO3 HTTP settings (Proxy, etc..)
+     *
+     * @param string $url URL of the Sentry instance to log to
+     * @param array|string $data Associative array of data to log
+     * @param array $headers Associative array of headers
+     */
+    protected function send_http($url, $data, $headers = array())
+    {
+        /** @var RequestFactory $requestFactory */
+        $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
+        $additionalOptions = [
+            'headers' => $headers,
+            'body' => $data
+        ];
+        $requestFactory->request($url, 'POST', $additionalOptions);
     }
 }
