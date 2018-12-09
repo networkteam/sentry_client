@@ -23,12 +23,10 @@ class Client extends \Raven_Client
             return;
         }
 
-        $production = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction();
-
         $this->tags_context(array(
             'typo3_version' => TYPO3_version,
             'typo3_mode' => TYPO3_MODE,
-            'application_context' => $production === true ? 'Production' : 'Development',
+            'application_context' => \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->__toString(),
         ));
 
         $reportUserInformation = ConfigurationService::getReportUserInformation();
