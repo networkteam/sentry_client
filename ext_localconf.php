@@ -11,11 +11,11 @@ if (!function_exists('register_client')) {
             return;
         }
 
-        $autoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/autoload.php';
-        if (file_exists($autoloadFile)) {
+        if (!\TYPO3\CMS\Core\Core\Bootstrap::usesComposerClassLoading()) {
+            $autoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/autoload.php';
             require_once($autoloadFile);
+            \Raven_Autoloader::register();
         }
-        \Raven_Autoloader::register();
 
         if (!\Networkteam\SentryClient\Service\ConfigurationService::registerClient()) {
             return;
