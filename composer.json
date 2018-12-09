@@ -23,7 +23,7 @@
     }
   ],
   "require": {
-    "sentry/sentry": "1.9.*",
+    "sentry/sentry": "1.10.*",
     "typo3/cms-core": "^8.7 || ^9.5"
   },
   "extra": {
