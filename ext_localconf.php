@@ -11,16 +11,16 @@ if (!function_exists('register_client')) {
             return;
         }
 
-        if (!\Networkteam\SentryClient\Service\ConfigurationService::registerClient()) {
-            return;
-        }
-
         $autoloadFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('sentry_client') . 'vendor/autoload.php';
         if (file_exists($autoloadFile)) {
             require_once($autoloadFile);
         }
-
         \Raven_Autoloader::register();
+
+        if (!\Networkteam\SentryClient\Service\ConfigurationService::registerClient()) {
+            return;
+        }
+
         $GLOBALS['USER']['sentryClient'] = new \Networkteam\SentryClient\Client();
         $errorHandler = new Raven_ErrorHandler($GLOBALS['USER']['sentryClient'], true);
         $errorHandler->registerExceptionHandler();
