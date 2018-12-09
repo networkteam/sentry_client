@@ -23,6 +23,8 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
 
     const REPORT_WITH_DEV_IP = 'reportWithDevIP';
 
+    const MESSAGE_BLACKLIST_REGEX = 'messageBlacklistRegex';
+
     /**
      * @return bool
      */
@@ -124,6 +126,13 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
     {
         $value = self::getExtensionConfiguration(self::REPORT_WITH_DEV_IP);
         return $value === null ? false : (bool)$value;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getMessageBlacklistRegex() {
+        return trim((string)self::getExtensionConfiguration(self::MESSAGE_BLACKLIST_REGEX));
     }
 
 }

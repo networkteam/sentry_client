@@ -19,6 +19,10 @@ class Client extends \Raven_Client
      */
     public function captureException($exception, $culprit_or_options = null, $logger = null, $vars = null)
     {
+        if ($this->messageMatchesBlacklistRegex($exception->getMessage())) {
+            return;
+        }
+
         $production = \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction();
 
         $this->tags_context(array(
@@ -69,5 +73,18 @@ class Client extends \Raven_Client
             'body' => $data
         ];
         $requestFactory->request($url, 'POST', $additionalOptions);
+    }
+
+    /**
+     * @param string $message
+     * @return bool
+     */
+    protected function messageMatchesBlacklistRegex($message) {
+        $regex = ConfigurationService::getMessageBlacklistRegex();
+        if (!empty($regex)) {
+            return (bool)preg_match($regex, $message);
+        }
+
+        return false;
     }
 }

@@ -28,6 +28,7 @@ Set the dsn (http://public_key:secret_key@your-sentry-server.com/project-id) in 
 * Report exceptions when `$GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']` matches client ip
 * Ignore PageNotFoundException and trigger 404 handling instead
 * Report user information: Select one of `none` | `userid` | `usernameandemail`
+* Blacklist exception message regular expression
 
 ## Development
 

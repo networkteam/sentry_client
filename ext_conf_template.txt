@@ -8,3 +8,5 @@ reportWithDevIP = 0
 activatePageNotFoundHandlingActive = 1
 # cat=Sentry/; type=options[none,userid,usernameandemail]; label=Report user information
 reportUserInformation = userid
+# cat=Sentry/; type=text; label=Exception message blacklist regex: Use to not report them. Example: /The current host header value does not match the configured trusted hosts pattern/
+messageBlacklistRegex =
