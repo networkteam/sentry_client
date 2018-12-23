@@ -26,11 +26,11 @@ if (!function_exists('register_client')) {
         $errorHandler->registerExceptionHandler();
         $errorHandler->registerShutdownFunction();
 
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Frontend\\ContentObject\\Exception\\ProductionExceptionHandler'] = [
-            'className' => 'Networkteam\\SentryClient\\Content\\ProductionExceptionHandler'
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Frontend\ContentObject\Exception\ProductionExceptionHandler::class] = [
+            'className' => \Networkteam\SentryClient\Content\ProductionExceptionHandler::class
         ];
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = 'Networkteam\\SentryClient\\DebugExceptionHandler';
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'Networkteam\\SentryClient\\ProductionExceptionHandler';
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = \Networkteam\SentryClient\DebugExceptionHandler::class;
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = \Networkteam\SentryClient\ProductionExceptionHandler::class;
     }
 }
 
