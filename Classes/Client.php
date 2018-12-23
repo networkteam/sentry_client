@@ -20,7 +20,7 @@ class Client extends \Raven_Client
     public function captureException($exception, $culprit_or_options = null, $logger = null, $vars = null)
     {
         if ($this->messageMatchesBlacklistRegex($exception->getMessage())) {
-            return;
+            return null;
         }
 
         $this->tags_context(array(
@@ -79,8 +79,8 @@ class Client extends \Raven_Client
      */
     protected function messageMatchesBlacklistRegex($message) {
         $regex = ConfigurationService::getMessageBlacklistRegex();
-        if (!empty($regex)) {
-            return (bool)preg_match($regex, $message);
+        if (!empty($regex) && !empty($message)) {
+            return preg_match($regex, $message) === 1;
         }
 
         return false;
