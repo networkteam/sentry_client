@@ -10,12 +10,6 @@ The extension is a wrapper for https://github.com/getsentry/sentry-php
 $ composer require networkteam/sentry-client
 ```
 
-After installation via composer the configuration setup has to be run.
-
-```bash
-$ vendor/bin/typo3cms extension:setup sentry_client
-```
-
 It's also available in TER: http://typo3.org/extensions/repository/view/sentry_client
 
 ## Configuration
@@ -38,7 +32,19 @@ You can use `$GLOBALS['USER']['sentryClient']` which is an instance of [\Raven_C
 
 `$GLOBALS['USER']['sentryClient']->tags_context(['release' => '201802072115']);`
 
-## Support / Improvements / Issues
+## How to test the connection to Sentry?
+
+Navigate to a reachable page with an unconfigured page type like 
+
+http://your-typo3-site.de/index.php?id=1&type=1001 
+
+This triggers a ServiceUnavailableException which will be reported.
+
+## Improvements / Issues
 
 This extension is managed on GitHub. Feel free to get in touch at
 https://github.com/networkteam/sentry_client
+
+## Help
+
+There is a Slack channel #ext-sentry_client
