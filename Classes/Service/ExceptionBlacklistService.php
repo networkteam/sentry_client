@@ -1,9 +1,10 @@
 <?php
+
 namespace Networkteam\SentryClient\Service;
 
 class ExceptionBlacklistService
 {
-    public static function shouldHandleException($exception)
+    public static function shouldHandleException(\Throwable $exception)
     {
         if (self::messageMatchesBlacklistRegex($exception->getMessage())) {
             return false;
@@ -21,8 +22,9 @@ class ExceptionBlacklistService
         $messageRegex = [
             'Cannot connect to the configured database',
             'An exception occured in driver: No such file or directory',
+            'An exception occured in driver: Access denied for user',
             'MySQL server has gone away',
-            'Solr returned an error: 503 Service Unavailable'
+            'Solr returned an error: 503 Service Unavailable',
         ];
 
         foreach ($messageRegex as $pattern) {
