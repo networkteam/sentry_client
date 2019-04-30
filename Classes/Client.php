@@ -3,6 +3,7 @@
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
+use Networkteam\SentryClient\Service\ExceptionBlacklistService;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -19,7 +20,7 @@ class Client extends \Raven_Client
      */
     public function captureException($exception, $culprit_or_options = null, $logger = null, $vars = null)
     {
-        if ($this->messageMatchesBlacklistRegex($exception->getMessage())) {
+        if (!ExceptionBlacklistService::shouldHandleException($exception)) {
             return null;
         }
 
@@ -71,18 +72,5 @@ class Client extends \Raven_Client
             'body' => $data
         ];
         $requestFactory->request($url, 'POST', $additionalOptions);
-    }
-
-    /**
-     * @param string $message
-     * @return bool
-     */
-    protected function messageMatchesBlacklistRegex($message) {
-        $regex = ConfigurationService::getMessageBlacklistRegex();
-        if (!empty($regex) && !empty($message)) {
-            return preg_match($regex, $message) === 1;
-        }
-
-        return false;
     }
 }

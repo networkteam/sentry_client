@@ -10,3 +10,5 @@ activatePageNotFoundHandlingActive = 1
 reportUserInformation = userid
 # cat=Sentry/; type=text; label=Exception message blacklist regex: Use to not report them. Example: /The current host header value does not match the configured trusted hosts pattern/
 messageBlacklistRegex =
+# cat=Sentry/; type=boolean; label=Report database connection errors: Such service outages should better be handled by a monitoring system
+reportDatabaseConnectionErrors = 0

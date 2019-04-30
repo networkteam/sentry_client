@@ -25,6 +25,8 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
 
     const MESSAGE_BLACKLIST_REGEX = 'messageBlacklistRegex';
 
+    const REPORT_DATABASE_CONNECTION_ERRORS = 'reportDatabaseConnectionErrors';
+
     /**
      * @return bool
      */
@@ -133,6 +135,11 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public static function getMessageBlacklistRegex() {
         return trim((string)self::getExtensionConfiguration(self::MESSAGE_BLACKLIST_REGEX));
+    }
+
+    public static function reportDatabaseConnectionErrors() {
+        $value = self::getExtensionConfiguration(self::REPORT_DATABASE_CONNECTION_ERRORS);
+        return $value === null ? 0 : (bool)$value;
     }
 
 }
