@@ -2,7 +2,9 @@
 
 namespace Networkteam\SentryClient\Service;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use Networkteam\SentryClient\Client;
 
 class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
@@ -53,7 +55,11 @@ class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected static function getExtensionConfiguration($key)
     {
-        $extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
+        if (VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getCurrentTypo3Version())['version_main'] < 9) {
+            $extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
+        } else {
+            $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('sentry_client');
+        }
 
         if (is_array($extensionConfiguration) && array_key_exists($key, $extensionConfiguration)) {
             return $extensionConfiguration[$key];
