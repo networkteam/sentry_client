@@ -27,7 +27,7 @@ class Client extends \Raven_Client
         $this->tags_context(array(
             'typo3_version' => TYPO3_version,
             'typo3_mode' => TYPO3_MODE,
-            'application_context' => \TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->__toString(),
+            'application_context' => GeneralUtility::getApplicationContext()->__toString(),
         ));
 
         $reportUserInformation = ConfigurationService::getReportUserInformation();
@@ -50,6 +50,7 @@ class Client extends \Raven_Client
                 $this->user_context($userContext);
             }
         }
+        $this->user_context(['ip_address' => GeneralUtility::getIndpEnv('REMOTE_ADDR')]);
 
         return parent::captureException($exception, $culprit_or_options, $logger, $vars);
     }
