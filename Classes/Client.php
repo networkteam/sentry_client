@@ -24,10 +24,11 @@ class Client extends \Raven_Client
             return null;
         }
 
+        $this->environment = preg_replace("/[^a-zA-Z0-9]/", "-", GeneralUtility::getApplicationContext());
+
         $this->tags_context(array(
             'typo3_version' => TYPO3_version,
-            'typo3_mode' => TYPO3_MODE,
-            'application_context' => GeneralUtility::getApplicationContext()->__toString(),
+            'typo3_mode' => TYPO3_MODE
         ));
 
         $reportUserInformation = ConfigurationService::getReportUserInformation();
