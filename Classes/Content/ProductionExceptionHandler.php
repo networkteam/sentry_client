@@ -2,8 +2,10 @@
 
 namespace Networkteam\SentryClient\Content;
 
+use Networkteam\SentryClient\Client;
 use Networkteam\SentryClient\Service\ConfigurationService;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 
 class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Exception\ProductionExceptionHandler
@@ -25,12 +27,12 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
         AbstractContentObject $contentObject = null,
         $contentObjectConfiguration = []
     ) {
-        if ($exception instanceof PageNotFoundException && ConfigurationService::isPageNotFoundHandlingActive()) {
+        if ($exception instanceof PageNotFoundException && ConfigurationService::activatePageNotFoundHandling()) {
             $this->pageNotFoundAndExit($exception, $contentObject);
             // script dies here
         }
 
-        $GLOBALS['USER']['sentryClient']->captureException($exception);
+        GeneralUtility::makeInstance(Client::class)->captureException($exception);
         return parent::handle($exception, $contentObject, $contentObjectConfiguration);
     }
 
@@ -51,6 +53,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
             $exception->getCode(),
             $currentRecord ? 'Caused by record ' . $currentRecord : ''
         ));
+
         $GLOBALS['TSFE']->pageNotFoundAndExit($reason);
         // script dies here
     }

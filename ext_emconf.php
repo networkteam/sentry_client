@@ -4,7 +4,7 @@ $EM_CONF['sentry_client'] = [
     'title' => 'Sentry Client',
     'description' => 'Sentry Client for TYPO3 - https://www.getsentry.com/',
     'category' => 'services',
-    'version' => '2.1.1',
+    'version' => '3.0.0',
     'state' => 'stable',
     'author' => 'Christoph Lehmann',
     'author_email' => 'christoph.lehmann@networkteam.com',
@@ -13,7 +13,7 @@ $EM_CONF['sentry_client'] = [
         [
             'depends' =>
                 [
-                    'typo3' => '8.7.0-9.5.99',
+                    'typo3' => '9.5.0-10.5.99'
                 ],
         ],
 ];

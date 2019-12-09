@@ -11,7 +11,6 @@
   "support": {
     "issues": "https://github.com/networkteam/sentry_client"
   },
-  "minimum-stability": "dev",
   "homepage": "https://networkteam.com",
   "license": [
     "GPL-2.0-or-later"
@@ -23,8 +22,8 @@
     }
   ],
   "require": {
-    "sentry/sentry": "1.10.*",
-    "typo3/cms-core": "^8.7 || ^9.5"
+    "typo3/cms-core": "^9.5 || ^10.0",
+    "sentry/sdk": "^2.0.4"
   },
   "extra": {
     "typo3/cms": {
@@ -38,7 +37,7 @@
     }
   },
   "replace": {
-    "sentry_client": "self.version",
+    "networkteam/sentry_client": "self.version",
     "typo3-ter/sentry-client": "self.version"
   }
 }

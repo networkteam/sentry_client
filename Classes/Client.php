@@ -1,78 +1,72 @@
 <?php
-
+declare(strict_types = 1);
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
-use TYPO3\CMS\Core\Http\RequestFactory;
+use Sentry\State\Scope;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use function Sentry\captureException;
+use function Sentry\configureScope;
+use function Sentry\init;
 
-class Client extends \Raven_Client
+class Client implements SingletonInterface
 {
-
-    public function __construct()
-    {
-        parent::__construct(ConfigurationService::getDsn());
-    }
-
     /**
      * Log an exception to sentry
      */
-    public function captureException($exception, $culprit_or_options = null, $logger = null, $vars = null)
+    public static function captureException(\Throwable $exception)
     {
-        if (!ExceptionBlacklistService::shouldHandleException($exception)) {
-            return null;
+        $dsn = ConfigurationService::getDsn();
+        if (!empty($dsn) && ExceptionBlacklistService::shouldHandleException($exception)) {
+
+            $options['dsn'] = $dsn;
+            $options['release'] = ConfigurationService::getRelease();
+            $options['environment'] = ConfigurationService::getEnvironment();
+            $options['error_types'] = E_ALL ^ E_NOTICE;
+            $options['project_root'] = ConfigurationService::getProjectRoot();
+            init($options);
+
+            self::setUserContext();
+            self::setTagsContext();
+            captureException($exception);
         }
-
-        $this->environment = preg_replace("/[^a-zA-Z0-9]/", "-", GeneralUtility::getApplicationContext());
-
-        $this->tags_context(array(
-            'typo3_version' => TYPO3_version,
-            'typo3_mode' => TYPO3_MODE
-        ));
-
-        $reportUserInformation = ConfigurationService::getReportUserInformation();
-        if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE) {
-            $userContext = [];
-            if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE']->fe_user->user['username'])) {
-                $userObject = $GLOBALS['TSFE']->fe_user->user;
-            } elseif (isset($GLOBALS['BE_USER']->user['username'])) {
-                $userObject = $GLOBALS['BE_USER']->user;
-            }
-
-            if ($userObject) {
-                $userContext['userid'] = $userObject['uid'];
-                if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
-                    $userContext['username'] = $userObject['username'];
-                    if (isset($userContext['email'])) {
-                        $userContext['email'] = $userObject['email'];
-                    }
-                }
-                $this->user_context($userContext);
-            }
-        }
-        $this->user_context(['ip_address' => GeneralUtility::getIndpEnv('REMOTE_ADDR')]);
-
-        return parent::captureException($exception, $culprit_or_options, $logger, $vars);
     }
 
-    /**
-     * Send the message over http to the sentry url given.
-     *
-     * Overwritten to use TYPO3 HTTP settings (Proxy, etc..)
-     *
-     * @param string $url URL of the Sentry instance to log to
-     * @param array|string $data Associative array of data to log
-     * @param array $headers Associative array of headers
-     */
-    protected function send_http($url, $data, $headers = array())
+    protected static function setUserContext(): void
     {
-        /** @var RequestFactory $requestFactory */
-        $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $additionalOptions = [
-            'headers' => $headers,
-            'body' => $data
-        ];
-        $requestFactory->request($url, 'POST', $additionalOptions);
+        configureScope(function (Scope $scope): void {
+            $userContext['ip_address'] = GeneralUtility::getIndpEnv('REMOTE_ADDR');
+            $reportUserInformation = ConfigurationService::getReportUserInformation();
+            if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE) {
+                if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE']->fe_user->user['username'])) {
+                    $userObject = $GLOBALS['TSFE']->fe_user->user;
+                } elseif (isset($GLOBALS['BE_USER']->user['username'])) {
+                    $userObject = $GLOBALS['BE_USER']->user;
+                }
+
+                if (isset($userObject)) {
+                    $userContext['id'] = $userObject['uid'];
+                    if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
+                        $userContext['username'] = $userObject['username'];
+                        if (isset($userContext['email'])) {
+                            $userContext['email'] = $userObject['email'];
+                        }
+                    }
+                }
+            }
+            $scope->setUser($userContext);
+        });
+    }
+
+    protected static function setTagsContext(): void
+    {
+        configureScope(function (Scope $scope): void {
+            $scope->setTags([
+                'typo3_version' => TYPO3_version,
+                'typo3_mode' => TYPO3_MODE
+            ]);
+        });
     }
 }
