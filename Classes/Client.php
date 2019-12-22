@@ -22,7 +22,9 @@ class Client implements SingletonInterface
         if (!empty($dsn) && ExceptionBlacklistService::shouldHandleException($exception)) {
 
             $options['dsn'] = $dsn;
-            $options['release'] = ConfigurationService::getRelease();
+            if (ConfigurationService::getRelease()) {
+                $options['release'] = ConfigurationService::getRelease();
+            }
             $options['environment'] = ConfigurationService::getEnvironment();
             $options['error_types'] = E_ALL ^ E_NOTICE;
             $options['project_root'] = ConfigurationService::getProjectRoot();
