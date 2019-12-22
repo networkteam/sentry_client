@@ -38,9 +38,14 @@ SetEnv SENTRY_ENVIRONMENT Staging
 
 ## How to test the connection to Sentry?
 
-Navigate to http://your-typo3-site.de/?type=unknownPageType
-
-This triggers an Exception which will be reported.
+```
+page = PAGE
+page.20 = USER
+page.20 {
+  userFunc = \Networkteam\SentryClient\Client->captureException
+}
+```
+This triggers an exception which will be reported.
 
 ## Issue tracker
 
