@@ -8,7 +8,7 @@ Exception logging with [Sentry](https://sentry.io/)
 $ composer require networkteam/sentry-client
 ```
 
-It's also available in TER: http://typo3.org/extensions/repository/view/sentry_client
+It's also available in [TER](http://typo3.org/extensions/repository/view/sentry_client).
 
 ## Configuration
 
