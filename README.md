@@ -66,3 +66,4 @@ There is a Slack channel #ext-sentry_client
 * Rename setting activatePageNotFoundHandlingActive to activatePageNotFoundHandling
 * Report E_ALL ^ E_NOTICE
 * Strip project root
+* Show event id in FE
