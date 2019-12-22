@@ -1,145 +1,92 @@
 <?php
-
+declare(strict_types = 1);
 namespace Networkteam\SentryClient\Service;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Networkteam\SentryClient\Client;
 
-class ConfigurationService implements \TYPO3\CMS\Core\SingletonInterface
+class ConfigurationService
 {
     const DSN = 'dsn';
 
-    const PRODUCTION_ONLY = 'productionOnly';
-
-    const PAGE_NOT_FOUND_HANDLING_ACTIVE = 'activatePageNotFoundHandlingActive';
+    const ACTIVATE_PAGE_NOT_FOUND_HANDLING = 'activatePageNotFoundHandling';
 
     const REPORT_USER_INFORMATION = 'reportUserInformation';
 
     const USER_INFORMATION_NONE = 'none';
 
-    const USER_INFORMATION_USERID = 'userid';
-
     const USER_INFORMATION_USERNAMEEMAIL = 'usernameandemail';
-
-    const REPORT_WITH_DEV_IP = 'reportWithDevIP';
 
     const MESSAGE_BLACKLIST_REGEX = 'messageBlacklistRegex';
 
     const REPORT_DATABASE_CONNECTION_ERRORS = 'reportDatabaseConnectionErrors';
 
+    const SHOW_EVENT_ID = 'showEventId';
+
     /**
-     * @return bool
+     * @param $path
+     * @return mixed
+     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
+     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
      */
-    public static function registerClient()
+    protected static function getExtensionConfiguration($path)
     {
-        if (!self::dsnIsParsable()) {
-            return false;
-        }
-
-        if (self::isProductionOnly() && !GeneralUtility::getApplicationContext()->isProduction()) {
-            return false;
-        }
-
-        $ipMatchesDevelopmentSystem = GeneralUtility::cmpIP(GeneralUtility::getIndpEnv('REMOTE_ADDR'), $GLOBALS['TYPO3_CONF_VARS']['SYS']['devIPmask']);
-        if (!self::reportWithDevIP() && $ipMatchesDevelopmentSystem) {
-            return false;
-        }
-
-        return true;
+        /** @var ExtensionConfiguration $extensionConfiguration */
+        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+        return $extensionConfiguration->get('sentry_client', $path);
     }
 
-    /**
-     * @return mixed|null null is returned for $key not available in extension configuration
-     */
-    protected static function getExtensionConfiguration($key)
+    public static function getDsn(): ?string
     {
-        $extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sentry_client']);
+        return getenv('SENTRY_DSN') ?: self::getExtensionConfiguration(self::DSN);
+    }
 
-        if (is_array($extensionConfiguration) && array_key_exists($key, $extensionConfiguration)) {
-            return $extensionConfiguration[$key];
+    public static function getEnvironment(): string
+    {
+        return getenv('SENTRY_ENVIRONMENT') ?: self::getNormalizedApplicationContext();
+    }
+
+    public static function getRelease(): ?string
+    {
+        return getenv('SENTRY_RELEASE') ?: self::getExtensionConfiguration('release');
+    }
+
+    public static function activatePageNotFoundHandling(): bool
+    {
+        return (bool)self::getExtensionConfiguration(self::ACTIVATE_PAGE_NOT_FOUND_HANDLING);
+    }
+
+    protected static function getNormalizedApplicationContext()
+    {
+        return preg_replace("/[^a-zA-Z0-9]/", "-", Environment::getContext());
+    }
+
+    public static function getReportUserInformation(): string
+    {
+        return self::getExtensionConfiguration(self::REPORT_USER_INFORMATION);
+    }
+
+    public static function getMessageBlacklistRegex(): ?string
+    {
+        return self::getExtensionConfiguration(self::MESSAGE_BLACKLIST_REGEX);
+    }
+
+    public static function reportDatabaseConnectionErrors(): bool
+    {
+        return (bool)self::getExtensionConfiguration(self::REPORT_DATABASE_CONNECTION_ERRORS);
+    }
+
+    public static function getProjectRoot()
+    {
+        if (Environment::isComposerMode()) {
+            return dirname(getcwd());
         } else {
-            return null;
+            return getcwd();
         }
     }
 
-    /**
-     * @return string
-     */
-    public static function getDsn()
-    {
-        return trim((string)self::getExtensionConfiguration(self::DSN));
+    public static function showEventId() {
+        return (bool)self::getExtensionConfiguration(self::SHOW_EVENT_ID);
     }
-
-    /**
-     * @return bool
-     */
-    public static function dsnIsParsable()  {
-        try {
-            if (empty(Client::parseDSN(self::getDsn()))) {
-                return false;
-            }
-        } catch (\Exception $ex) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public static function isProductionOnly()
-    {
-        $value = self::getExtensionConfiguration(self::PRODUCTION_ONLY);
-        return $value === null ?: (bool)$value;
-    }
-
-    /**
-     * @return bool
-     */
-    public static function isPageNotFoundHandlingActive()
-    {
-        $value = self::getExtensionConfiguration(self::PAGE_NOT_FOUND_HANDLING_ACTIVE);
-        return $value === null ?: (bool)$value;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReportUserInformation()
-    {
-        $value = self::getExtensionConfiguration(self::REPORT_USER_INFORMATION);
-        switch ($value) {
-            case self::USER_INFORMATION_NONE:
-                return $value;
-            case self::USER_INFORMATION_USERID:
-                return $value;
-            case self::USER_INFORMATION_USERNAMEEMAIL:
-                return $value;
-            default:
-                return self::USER_INFORMATION_USERID;
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public static function reportWithDevIP()
-    {
-        $value = self::getExtensionConfiguration(self::REPORT_WITH_DEV_IP);
-        return $value === null ? false : (bool)$value;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getMessageBlacklistRegex() {
-        return trim((string)self::getExtensionConfiguration(self::MESSAGE_BLACKLIST_REGEX));
-    }
-
-    public static function reportDatabaseConnectionErrors() {
-        $value = self::getExtensionConfiguration(self::REPORT_DATABASE_CONNECTION_ERRORS);
-        return $value === null ? 0 : (bool)$value;
-    }
-
 }
