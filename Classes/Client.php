@@ -16,7 +16,7 @@ class Client implements SingletonInterface
     /**
      * Log an exception to sentry
      */
-    public static function captureException(\Throwable $exception)
+    public static function captureException(\Throwable $exception): ?string
     {
         $dsn = ConfigurationService::getDsn();
         if (!empty($dsn) && ExceptionBlacklistService::shouldHandleException($exception)) {
@@ -30,7 +30,9 @@ class Client implements SingletonInterface
 
             self::setUserContext();
             self::setTagsContext();
-            captureException($exception);
+            $eventId = captureException($exception);
+
+            return $eventId;
         }
     }
 

@@ -22,6 +22,8 @@ class ConfigurationService
 
     const REPORT_DATABASE_CONNECTION_ERRORS = 'reportDatabaseConnectionErrors';
 
+    const SHOW_EVENT_ID = 'showEventId';
+
     /**
      * @param $path
      * @return mixed
@@ -82,5 +84,9 @@ class ConfigurationService
         } else {
             return getcwd();
         }
+    }
+
+    public static function showEventId() {
+        return (bool)self::getExtensionConfiguration(self::SHOW_EVENT_ID);
     }
 }

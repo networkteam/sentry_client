@@ -10,5 +10,5 @@ messageBlacklistRegex =
 reportDatabaseConnectionErrors = 0
 # cat=Sentry/; type=string; label=Release: See https://docs.sentry.io/error-reporting/configuration/?platform=php#release, you can also use the SENTRY_RELEASE environment variable
 release =
-# cat=Sentry/; type=string; label=Maintenance Mode: Deactivate the client when one of this (comma separated) filepaths exist. This is useful for deployments on high trafficed sites in combination with symlinks.
-maintenanceFiles =
+# cat=Sentry/; type=boolean; label=Show Event id
+showEventId = 1
