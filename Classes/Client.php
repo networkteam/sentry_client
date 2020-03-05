@@ -54,7 +54,7 @@ class Client implements SingletonInterface
                     $userContext['id'] = $userObject['uid'];
                     if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
                         $userContext['username'] = $userObject['username'];
-                        if (isset($userContext['email'])) {
+                        if (isset($userObject['email'])) {
                             $userContext['email'] = $userObject['email'];
                         }
                     }
