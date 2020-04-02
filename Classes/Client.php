@@ -36,6 +36,8 @@ class Client implements SingletonInterface
 
             return $eventId;
         }
+
+        return null;
     }
 
     protected static function setUserContext(): void
