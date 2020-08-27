@@ -12,3 +12,5 @@ reportDatabaseConnectionErrors = 0
 release =
 # cat=Sentry/; type=boolean; label=Show Event id
 showEventId = 1
+# cat=Sentry/; type=options[,warning,error]; label=LogWriter level: The LogWriter reports errors which are normally just logged
+logWriterLogLevel = error
