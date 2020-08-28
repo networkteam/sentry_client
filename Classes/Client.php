@@ -45,9 +45,6 @@ class Client implements SingletonInterface
         return false;
     }
 
-    /**
-     * Log an exception to sentry
-     */
     public static function captureException(\Throwable $exception): ?string
     {
         if (self::init() && ExceptionBlacklistService::shouldHandleException($exception)) {
@@ -94,20 +91,16 @@ class Client implements SingletonInterface
         });
     }
 
-    public static function captureMessage($message, $loglevel)
+    public static function captureMessage(string $message, $loglevel = 'info'): ?string
     {
-        captureMessage($message, self::createSeverity($loglevel));
+        return captureMessage($message, self::createSeverity($loglevel));
     }
 
-    protected static function createSeverity($loglevel): Severity
+    protected static function createSeverity(string $loglevel): Severity
     {
         switch ($loglevel) {
             case LogLevel::EMERGENCY:
-                $severityValue = Severity::FATAL;
-                break;
             case LogLevel::ALERT:
-                $severityValue = Severity::FATAL;
-                break;
             case LogLevel::CRITICAL:
                 $severityValue = Severity::FATAL;
                 break;
@@ -117,10 +110,7 @@ class Client implements SingletonInterface
             case LogLevel::WARNING:
                 $severityValue = Severity::WARNING;
                 break;
-            case LogLevel::INFO:
-                $severityValue = Severity::INFO;
-                break;
-            case LogLevel::NOTICE:
+            default:
                 $severityValue = Severity::INFO;
         }
         return new Severity($severityValue);
