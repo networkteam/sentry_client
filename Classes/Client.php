@@ -91,7 +91,7 @@ class Client implements SingletonInterface
         });
     }
 
-    public static function captureMessage(string $message, $loglevel = 'info'): ?string
+    public static function captureMessage(string $message, string $loglevel = 'info'): ?string
     {
         return captureMessage($message, self::createSeverity($loglevel));
     }

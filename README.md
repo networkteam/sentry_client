@@ -1,14 +1,25 @@
 # Sentry Client for TYPO3
 
-Exception logging with [Sentry](https://sentry.io/)
+TYPO3 logs error messages and exceptions to logfiles and the backend log module. This extension sends them to [Sentry](https://sentry.io/),
+a SaaS/self-hosted application which aggregates them and informs you by mail. In Sentry you see a enriched error messages with
+stacktrace, HTTP headers and submitted request/form data.
+
+## Technical decisions
+
+Exceptions through database outages (imagine a mysql server restart) should not be reported, so the db connection is checked
+before. Exceptions may be excluded via regexp on their message (won't fix this error => exclude it). 
+TYPO3 throws a lot of PHP Notices and they are not really interesting in production, they are excluded by default.
 
 ## Installation
+
+The preferred way is with Composer:
 
 ```bash
 $ composer require networkteam/sentry-client
 ```
 
-It's also available in [TER](http://typo3.org/extensions/repository/view/sentry_client).
+The [TER version](http://typo3.org/extensions/repository/view/sentry_client) includes some composer dependencies locally,
+which may lead to problems in the future (one package with multiple version in the project).
 
 ## Configuration
 
@@ -21,6 +32,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'Networkteam\
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = 'Networkteam\SentryClient\DebugExceptionHandler';
 ```
 
+### Environment variables
+
 The new Sentry SDK 2.x has some [environment variables](https://docs.sentry.io/error-reporting/configuration/?platform=php#dsn) which can be used, for example in a .htaccess file:
 
 ```apacheconfig
@@ -29,15 +42,28 @@ SetEnv SENTRY_RELEASE 1.0.7
 SetEnv SENTRY_ENVIRONMENT Staging
 ```
 
-## Feature Toggles
+### LogWriter
+
+The extension comes with a LogWriter which is enabled by default for the error loglevel and forward messages to Sentry. 
+You can disable (EM) or configure it for specific components:
+
+```
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['writerConfiguration'] = [
+    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
+        \Networkteam\SentryClient\SentryLogWriter::class => [],
+    ]
+];
+```
+
+### Feature Toggles
 
 * Ignore PageNotFoundException and trigger 404 handling instead
 * Ignore database connection errors (they should better be handled by a monitoring system)
 * Report user information: Select one of `none` | `userid` | `usernameandemail`
-* Blacklist exception message regular expression 
+* Blacklist exception message regular expression
 * LogWriter Loglevel: If set, messages are reported which normally are just logged  
 
-## How to test the connection to Sentry?
+## How to test if the extension works?
 
 ```
 page = PAGE
