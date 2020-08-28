@@ -24,6 +24,8 @@ class ConfigurationService
 
     const SHOW_EVENT_ID = 'showEventId';
 
+    const LOGWRITER_LOGLEVEL = 'logWriterLogLevel';
+
     /**
      * @param $path
      * @return mixed
@@ -88,5 +90,9 @@ class ConfigurationService
 
     public static function showEventId() {
         return (bool)self::getExtensionConfiguration(self::SHOW_EVENT_ID);
+    }
+
+    public static function getLogWriterLevel() {
+        return self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
     }
 }

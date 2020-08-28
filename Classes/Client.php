@@ -1,39 +1,54 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
+use Sentry\Severity;
 use Sentry\State\Scope;
+use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use function Sentry\captureException;
+use function Sentry\captureMessage;
 use function Sentry\configureScope;
 use function Sentry\init;
 
 class Client implements SingletonInterface
 {
-    /**
-     * Log an exception to sentry
-     */
-    public static function captureException(\Throwable $exception): ?string
-    {
-        $dsn = ConfigurationService::getDsn();
-        if (!empty($dsn) && ExceptionBlacklistService::shouldHandleException($exception)) {
+    protected static $initialized = false;
 
+    public static function init(): bool
+    {
+        if (self::$initialized) {
+            return true;
+        }
+
+        $dsn = ConfigurationService::getDsn();
+        if (!empty($dsn)) {
             $options['dsn'] = $dsn;
             if (ConfigurationService::getRelease()) {
                 $options['release'] = ConfigurationService::getRelease();
             }
             $options['environment'] = ConfigurationService::getEnvironment();
-            $options['error_types'] = E_ALL ^ E_NOTICE;
+            $options['error_types'] = E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED;
             $options['project_root'] = ConfigurationService::getProjectRoot();
             init($options);
 
             self::setUserContext();
             self::setTagsContext();
-            $eventId = captureException($exception);
+            self::$initialized = true;
 
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function captureException(\Throwable $exception): ?string
+    {
+        if (self::init() && ExceptionBlacklistService::shouldHandleException($exception)) {
+            $eventId = captureException($exception);
             return $eventId;
         }
 
@@ -74,5 +89,30 @@ class Client implements SingletonInterface
                 'typo3_mode' => TYPO3_MODE
             ]);
         });
+    }
+
+    public static function captureMessage(string $message, string $loglevel = 'info'): ?string
+    {
+        return captureMessage($message, self::createSeverity($loglevel));
+    }
+
+    protected static function createSeverity(string $loglevel): Severity
+    {
+        switch ($loglevel) {
+            case LogLevel::EMERGENCY:
+            case LogLevel::ALERT:
+            case LogLevel::CRITICAL:
+                $severityValue = Severity::FATAL;
+                break;
+            case LogLevel::ERROR:
+                $severityValue = Severity::ERROR;
+                break;
+            case LogLevel::WARNING:
+                $severityValue = Severity::WARNING;
+                break;
+            default:
+                $severityValue = Severity::INFO;
+        }
+        return new Severity($severityValue);
     }
 }
