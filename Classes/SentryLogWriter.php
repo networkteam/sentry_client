@@ -11,7 +11,9 @@ class SentryLogWriter extends AbstractWriter
 {
     public function writeLog(LogRecord $record)
     {
-        if (Client::init()) {
+        if ($record->getComponent() !== 'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler' &&
+            Client::init()
+        ) {
             withScope(function (Scope $scope) use ($record): void {
                 $scope->setExtra('component', $record->getComponent());
                 if ($record->getData()) {
