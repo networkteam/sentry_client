@@ -39,7 +39,7 @@ class Client extends \Raven_Client
                 $userObject = $GLOBALS['BE_USER']->user;
             }
 
-            if ($userObject) {
+            if (isset($userObject)) {
                 $userContext['userid'] = $userObject['uid'];
                 if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
                     $userContext['username'] = $userObject['username'];
