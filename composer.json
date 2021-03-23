@@ -37,7 +37,6 @@
     }
   },
   "replace": {
-    "networkteam/sentry_client": "self.version",
     "typo3-ter/sentry-client": "self.version"
   }
 }
