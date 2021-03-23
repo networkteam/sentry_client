@@ -4,8 +4,10 @@ namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
+use Sentry\EventId;
 use Sentry\Severity;
 use Sentry\State\Scope;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,7 +34,7 @@ class Client implements SingletonInterface
             }
             $options['environment'] = ConfigurationService::getEnvironment();
             $options['error_types'] = E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED;
-            $options['project_root'] = ConfigurationService::getProjectRoot();
+            $options['in_app_include'] = [Environment::getExtensionsPath()];
             init($options);
 
             self::setUserContext();
@@ -45,7 +47,7 @@ class Client implements SingletonInterface
         return false;
     }
 
-    public static function captureException(\Throwable $exception): ?string
+    public static function captureException(\Throwable $exception): ?EventId
     {
         if (self::init() && ExceptionBlacklistService::shouldHandleException($exception)) {
             $eventId = captureException($exception);
@@ -91,7 +93,7 @@ class Client implements SingletonInterface
         });
     }
 
-    public static function captureMessage(string $message, string $loglevel = 'info'): ?string
+    public static function captureMessage(string $message, string $loglevel = 'info'): ?EventId
     {
         return captureMessage($message, self::createSeverity($loglevel));
     }
