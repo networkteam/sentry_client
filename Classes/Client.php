@@ -65,7 +65,10 @@ class Client implements SingletonInterface
                 $reportUserInformation = ConfigurationService::getReportUserInformation();
                 if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
                     $context = GeneralUtility::makeInstance(Context::class);
-                    if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+                    if (
+                        class_exists(ApplicationType::class) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()
+                        || TYPO3_MODE === 'FE'
+                    ) {
                         $frontendUserAspect = $context->getAspect('frontend.user');
                         if ($frontendUserAspect->isLoggedIn()) {
                             $userObject = $GLOBALS['TSFE']->fe_user->user;
