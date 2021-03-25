@@ -22,7 +22,7 @@
     }
   ],
   "require": {
-    "typo3/cms-core": "^9.5 || ^10.0",
+    "typo3/cms-core": "^9.5 || ^10.0 || ^11.0",
     "sentry/sdk": "^3.0.0"
   },
   "extra": {
@@ -37,7 +37,6 @@
     }
   },
   "replace": {
-    "networkteam/sentry_client": "self.version",
     "typo3-ter/sentry-client": "self.version"
   }
 }
