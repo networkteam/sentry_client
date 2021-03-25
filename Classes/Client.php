@@ -37,6 +37,10 @@ class Client implements SingletonInterface
             $options['environment'] = ConfigurationService::getEnvironment();
             $options['error_types'] = E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED;
             $options['in_app_include'] = [Environment::getExtensionsPath()];
+            if (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']) && $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'] !== '') {
+                $options['http_proxy'] = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
+            }
+
             init($options);
 
             self::setUserContext();
