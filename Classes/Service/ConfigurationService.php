@@ -61,7 +61,7 @@ class ConfigurationService
 
     protected static function getNormalizedApplicationContext()
     {
-        return preg_replace("/[^a-zA-Z0-9]/", "-", Environment::getContext());
+        return preg_replace("/[^a-zA-Z0-9]/", "-", (string)Environment::getContext());
     }
 
     public static function getReportUserInformation(): string
@@ -77,15 +77,6 @@ class ConfigurationService
     public static function reportDatabaseConnectionErrors(): bool
     {
         return (bool)self::getExtensionConfiguration(self::REPORT_DATABASE_CONNECTION_ERRORS);
-    }
-
-    public static function getProjectRoot()
-    {
-        if (Environment::isComposerMode()) {
-            return dirname(getcwd());
-        } else {
-            return getcwd();
-        }
     }
 
     public static function showEventId() {

@@ -23,7 +23,7 @@
   ],
   "require": {
     "typo3/cms-core": "^9.5 || ^10.0 || ^11.0",
-    "sentry/sdk": "^2.0.4"
+    "sentry/sdk": "^3.0.0"
   },
   "extra": {
     "typo3/cms": {
