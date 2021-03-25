@@ -6,6 +6,8 @@ use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
 use Sentry\Severity;
 use Sentry\State\Scope;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -57,38 +59,60 @@ class Client implements SingletonInterface
 
     protected static function setUserContext(): void
     {
-        configureScope(function (Scope $scope): void {
-            $userContext['ip_address'] = GeneralUtility::getIndpEnv('REMOTE_ADDR');
-            $reportUserInformation = ConfigurationService::getReportUserInformation();
-            if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE) {
-                if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE']->fe_user->user['username'])) {
-                    $userObject = $GLOBALS['TSFE']->fe_user->user;
-                } elseif (isset($GLOBALS['BE_USER']->user['username'])) {
-                    $userObject = $GLOBALS['BE_USER']->user;
-                }
+        configureScope(
+            function (Scope $scope): void {
+                $userContext['ip_address'] = GeneralUtility::getIndpEnv('REMOTE_ADDR');
+                $reportUserInformation = ConfigurationService::getReportUserInformation();
+                if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
+                    $context = GeneralUtility::makeInstance(Context::class);
+                    if (
+                        class_exists(ApplicationType::class) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()
+                        || TYPO3_MODE === 'FE'
+                    ) {
+                        $frontendUserAspect = $context->getAspect('frontend.user');
+                        if ($frontendUserAspect->isLoggedIn()) {
+                            $userObject = $GLOBALS['TSFE']->fe_user->user;
+                        }
+                    } else {
+                        $backendUserAspect = $context->getAspect('backend.user');
+                        if ($backendUserAspect->isLoggedIn()) {
+                            $userObject = $GLOBALS['BE_USER']->user;
+                        }
+                    }
 
-                if (isset($userObject)) {
-                    $userContext['id'] = $userObject['uid'];
-                    if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
-                        $userContext['username'] = $userObject['username'];
-                        if (isset($userObject['email'])) {
-                            $userContext['email'] = $userObject['email'];
+                    if (isset($userObject)) {
+                        $userContext['id'] = $userObject['uid'];
+                        if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
+                            $userContext['username'] = $userObject['username'];
+                            if (isset($userObject['email'])) {
+                                $userContext['email'] = $userObject['email'];
+                            }
                         }
                     }
                 }
+                $scope->setUser($userContext);
             }
-            $scope->setUser($userContext);
-        });
+        );
     }
 
     protected static function setTagsContext(): void
     {
-        configureScope(function (Scope $scope): void {
-            $scope->setTags([
-                'typo3_version' => TYPO3_version,
-                'typo3_mode' => TYPO3_MODE
-            ]);
-        });
+        configureScope(
+            function (Scope $scope): void {
+                if (isset($GLOBALS['TYPO3_REQUEST']) && class_exists(ApplicationType::class)) {
+                    $mode = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend() ? 'FE' : 'BE';
+                } elseif (defined('TYPO3_MODE')) {
+                    // deprecated in TYPO3 v11
+                    $mode = TYPO3_MODE;
+                }
+                $scope->setTags(
+                    [
+                        'typo3_version' => TYPO3_version,
+                        'typo3_mode' => $mode,
+                    ]
+                );
+            }
+        );
     }
 
     public static function captureMessage(string $message, string $loglevel = 'info'): ?string
