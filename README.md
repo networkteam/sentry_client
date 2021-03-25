@@ -47,7 +47,7 @@ SetEnv SENTRY_ENVIRONMENT Staging
 The extension comes with a LogWriter which is enabled by default for the error loglevel and forward messages to Sentry. 
 You can disable (EM) or configure it for specific components:
 
-```
+```php
 $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['writerConfiguration'] = [
     \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
         \Networkteam\SentryClient\SentryLogWriter::class => [],
@@ -65,7 +65,7 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 
 ## How to test if the extension works?
 
-```
+```typescript
 page = PAGE
 page.20 = USER
 page.20 {
