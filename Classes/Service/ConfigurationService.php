@@ -27,12 +27,12 @@ class ConfigurationService
     const LOGWRITER_LOGLEVEL = 'logWriterLogLevel';
 
     /**
-     * @param $path
+     * @param string $path
      * @return mixed
      * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
      * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
      */
-    protected static function getExtensionConfiguration($path)
+    protected static function getExtensionConfiguration(string $path)
     {
         /** @var ExtensionConfiguration $extensionConfiguration */
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
