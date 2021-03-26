@@ -9,6 +9,13 @@ use function Sentry\withScope;
 
 class SentryLogWriter extends AbstractWriter
 {
+
+    /**
+     * Forwards the log record to Sentry
+     *
+     * @param LogRecord $record Log record
+     * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
+     */
     public function writeLog(LogRecord $record)
     {
         if ($record->getComponent() !== 'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler' &&
@@ -24,5 +31,7 @@ class SentryLogWriter extends AbstractWriter
                 Client::captureMessage($record->getMessage(), $record->getLevel());
             });
         }
+
+        return $this;
     }
 }
