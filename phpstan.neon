@@ -1,0 +1,21 @@
+parameters:
+  # 0: basic checks
+  # 1: possibly undefined variable, ...
+  # 2: unknown methods checked on all expressions
+  # 3: return types, types assigned to properties
+  # 4: basic dead code checking
+  # 5: checking types of arguments passed to methods and functions
+  # 6: check for missing typehints
+  # 7: report partially wrong union types
+  # 8: report calling methods and accessing properties on nullable types
+  level: 6
+
+  paths:
+    - Classes
+    - ext_localconf.php
+
+  reportUnmatchedIgnoredErrors: false
+  ignoreErrors:
+    - '#Constant TYPO3_MODE not found#'
+    - '#Constant TYPO3_version not found#'
+    - '#parameter \$contentObjectConfiguration with no value type specified in iterable type array#'
