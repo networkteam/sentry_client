@@ -32,8 +32,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
     {
         if (ConfigurationService::showEventId()) {
             return sprintf('%s Event: %s', parent::getTitle($exception), $this->eventId);
-        } else {
-            return parent::getTitle($exception);
         }
+        return parent::getTitle($exception);
     }
 }

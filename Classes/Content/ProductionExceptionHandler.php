@@ -37,9 +37,8 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
 
         if (ConfigurationService::showEventId()) {
             return sprintf('%s Event: %s', $errorMessage, $eventId);
-        } else {
-            return $errorMessage;
         }
+        return $errorMessage;
     }
 
     /**
