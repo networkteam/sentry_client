@@ -20,6 +20,9 @@ use function Sentry\init;
 
 class Client implements SingletonInterface
 {
+    /**
+     * @var bool
+     */
     protected static $initialized = false;
 
     public static function init(): bool
@@ -114,7 +117,7 @@ class Client implements SingletonInterface
                 $scope->setTags(
                     [
                         'typo3_version' => TYPO3_version,
-                        'typo3_mode' => $mode,
+                        'typo3_mode' => $mode ?? '',
                     ]
                 );
             }

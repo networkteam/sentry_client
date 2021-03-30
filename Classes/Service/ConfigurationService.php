@@ -59,7 +59,7 @@ class ConfigurationService
         return (bool)self::getExtensionConfiguration(self::ACTIVATE_PAGE_NOT_FOUND_HANDLING);
     }
 
-    protected static function getNormalizedApplicationContext()
+    protected static function getNormalizedApplicationContext(): string
     {
         return preg_replace("/[^a-zA-Z0-9]/", "-", (string)Environment::getContext());
     }
@@ -79,11 +79,13 @@ class ConfigurationService
         return (bool)self::getExtensionConfiguration(self::REPORT_DATABASE_CONNECTION_ERRORS);
     }
 
-    public static function showEventId() {
+    public static function showEventId(): bool
+    {
         return (bool)self::getExtensionConfiguration(self::SHOW_EVENT_ID);
     }
 
-    public static function getLogWriterLevel() {
-        return self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
+    public static function getLogWriterLevel(): string
+    {
+        return (string)self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
     }
 }

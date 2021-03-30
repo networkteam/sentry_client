@@ -46,7 +46,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
      * @param PageNotFoundException $exception
      * @param AbstractContentObject $contentObject
      */
-    protected function pageNotFoundAndExit(PageNotFoundException $exception, AbstractContentObject $contentObject)
+    protected function pageNotFoundAndExit(PageNotFoundException $exception, AbstractContentObject $contentObject): void
     {
         if ($contentObject instanceof AbstractContentObject) {
             $currentRecord = $contentObject->getContentObjectRenderer()->currentRecord;
