@@ -13,6 +13,10 @@ class ExceptionBlacklistService
             return false;
         }
 
+        if ($exception instanceof \TYPO3\CMS\Core\Http\ImmediateResponseException) {
+            return false;
+        }
+
         if (!ConfigurationService::reportDatabaseConnectionErrors()) {
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
             if (!$queryBuilder->getConnection()->isConnected()) {
