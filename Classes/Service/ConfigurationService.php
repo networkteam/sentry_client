@@ -10,8 +10,6 @@ class ConfigurationService
 {
     const DSN = 'dsn';
 
-    const ACTIVATE_PAGE_NOT_FOUND_HANDLING = 'activatePageNotFoundHandling';
-
     const REPORT_USER_INFORMATION = 'reportUserInformation';
 
     const USER_INFORMATION_NONE = 'none';
@@ -52,11 +50,6 @@ class ConfigurationService
     public static function getRelease(): ?string
     {
         return getenv('SENTRY_RELEASE') ?: self::getExtensionConfiguration('release');
-    }
-
-    public static function activatePageNotFoundHandling(): bool
-    {
-        return (bool)self::getExtensionConfiguration(self::ACTIVATE_PAGE_NOT_FOUND_HANDLING);
     }
 
     protected static function getNormalizedApplicationContext(): string
