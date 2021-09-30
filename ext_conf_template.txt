@@ -1,7 +1,5 @@
 # cat=Sentry/; type=text; label=DSN: http://public_key@your-sentry-server.com/project-id, you can also use the SENTRY_DSN environment variable
 dsn =
-# cat=Sentry/; type=boolean; label=Ignore PageNotFoundException and trigger 404 handling instead
-activatePageNotFoundHandling = 1
 # cat=Sentry/; type=options[none,userid,usernameandemail]; label=Report user information
 reportUserInformation = userid
 # cat=Sentry/; type=text; label=Exception message blacklist regex: Use to not report them. Example: /an exception message/
