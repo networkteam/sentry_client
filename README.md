@@ -45,7 +45,7 @@ SetEnv SENTRY_ENVIRONMENT Staging
 ### LogWriter
 
 The extension comes with a LogWriter which is enabled by default for the error loglevel and forward messages to Sentry. 
-You can disable (EM) or configure it for specific components:
+You can enable it in EM or configure it for specific components:
 
 ```php
 $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['writerConfiguration'] = [
