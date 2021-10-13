@@ -25,7 +25,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
         \Exception $exception,
         AbstractContentObject $contentObject = null,
         $contentObjectConfiguration = []
-    ) {
+    ): string {
         $eventId = GeneralUtility::makeInstance(Client::class)->captureException($exception);
         $errorMessage = parent::handle($exception, $contentObject, $contentObjectConfiguration);
 
