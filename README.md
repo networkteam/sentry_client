@@ -84,6 +84,14 @@ There is a Slack channel #ext-sentry_client
 
 ## Changelog
 
+### 3.0..3.1
+
+* Add experimental LogWriter
+* Remove setting activatePageNotFoundHandling
+* Ignore PageNotFoundException by default
+* Support TYPO3 proxy setting
+* Use sentry/sdk:3.1
+
 ### 2.0..3.0
 
 * Use sentry/sdk:2.0
