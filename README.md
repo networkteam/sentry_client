@@ -7,7 +7,7 @@ stacktrace, HTTP headers and submitted request/form data.
 ## Technical decisions
 
 Exceptions through database outages (imagine a mysql server restart) should not be reported, so the db connection is checked
-before. Exceptions may be excluded via regexp on their message (won't fix this error => exclude it). 
+before. Exceptions may be excluded via regexp on their message (won't fix this error => exclude it).
 TYPO3 throws a lot of PHP Notices and they are not really interesting in production, they are excluded by default.
 
 ## Installation
@@ -44,7 +44,7 @@ SetEnv SENTRY_ENVIRONMENT Staging
 
 ### LogWriter
 
-The extension comes with a LogWriter which is enabled by default for the error loglevel and forward messages to Sentry. 
+The extension comes with a LogWriter which is enabled by default for the error loglevel and forward messages to Sentry.
 You can enable it in EM or configure it for specific components:
 
 ```php
@@ -60,7 +60,7 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 * Ignore database connection errors (they should better be handled by a monitoring system)
 * Report user information: Select one of `none` | `userid` | `usernameandemail`
 * Blacklist exception message regular expression
-* LogWriter Loglevel: If set, messages are reported which normally are just logged  
+* LogWriter Loglevel: If set, messages are reported which normally are just logged
 
 ## How to test if the extension works?
 
@@ -68,7 +68,7 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 page = PAGE
 page.20 = USER
 page.20 {
-  userFunc = \Networkteam\SentryClient\Client->captureException
+  userFunc = Networkteam\SentryClient\Client->captureException
 }
 ```
 This triggers an exception which will be reported.
