@@ -10,6 +10,7 @@ use Sentry\State\Scope;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -116,7 +117,7 @@ class Client implements SingletonInterface
                 }
                 $scope->setTags(
                     [
-                        'typo3_version' => TYPO3_version,
+                        'typo3_version' => GeneralUtility::makeInstance(Typo3Version::class)->getVersion(),
                         'typo3_mode' => $mode ?? '',
                     ]
                 );
