@@ -2,9 +2,13 @@
 
 namespace Networkteam\SentryClient;
 
+use Sentry\Event;
+use Sentry\Stacktrace;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Log\Writer\AbstractWriter;
+use TYPO3\CMS\Core\Utility\StringUtility;
+
 use function Sentry\withScope;
 
 class SentryLogWriter extends AbstractWriter
@@ -33,5 +37,21 @@ class SentryLogWriter extends AbstractWriter
         }
 
         return $this;
+    }
+
+    public static function cleanupStacktrace(Event $event): Event
+    {
+        if (($event->getTags()['source'] ?? false) === 'logwriter') {
+            $stacktrace = $event->getStacktrace();
+            foreach($stacktrace->getFrames() as $no => $frame) {
+                if (StringUtility::beginsWith($frame->getFunctionName() ?? '', 'Psr\Log\AbstractLogger::')) {
+                    $stacktraceBeforeLogCall = new Stacktrace(array_slice($stacktrace->getFrames(), 0, $no));
+                    $event->setStacktrace($stacktraceBeforeLogCall);
+                    break;
+                }
+            }
+        }
+
+        return $event;
     }
 }
