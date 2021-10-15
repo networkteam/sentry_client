@@ -5,7 +5,9 @@ namespace Networkteam\SentryClient\Service;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
+use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
 
 class ExceptionBlacklistService
 {
@@ -25,6 +27,26 @@ class ExceptionBlacklistService
         if (!ConfigurationService::reportDatabaseConnectionErrors()) {
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
             if (!$queryBuilder->getConnection()->isConnected()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static function shouldHandleLogMessage(LogRecord $logRecord): bool
+    {
+        if ($logRecord->getComponent() === 'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler') {
+            return false;
+        }
+
+        if (self::messageMatchesBlacklistRegex($logRecord->getMessage())) {
+            return false;
+        }
+
+        $componentBlacklist = GeneralUtility::trimExplode(',', ConfigurationService::getLogWriterComponentBlacklist(), true);
+        foreach ($componentBlacklist as $componentInBlacklist) {
+            if (StringUtility::beginsWith($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
                 return false;
             }
         }
