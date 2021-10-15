@@ -4,8 +4,10 @@ namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
+use Sentry\Event;
 use Sentry\EventId;
 use Sentry\Severity;
+use Sentry\Stacktrace;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Context\Context;
@@ -14,6 +16,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
 use function Sentry\captureException;
 use function Sentry\captureMessage;
 use function Sentry\configureScope;
@@ -44,6 +47,13 @@ class Client implements SingletonInterface
             if (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']) && $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'] !== '') {
                 $options['http_proxy'] = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
             }
+
+            // Enrich LogWriter messages with stackstrace to have a better event grouping. Log messages often contain
+            // dynamic variables like file names and thus they are not groupable by message.
+            $options['attach_stacktrace'] = true;
+            $options['before_send'] = function (Event $event): Event {
+                return SentryLogWriter::cleanupStacktrace($event);
+            };
 
             init($options);
 
