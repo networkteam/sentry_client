@@ -24,6 +24,8 @@ class ConfigurationService
 
     const LOGWRITER_LOGLEVEL = 'logWriterLogLevel';
 
+    const LOGWRITER_COMPONENT_BLACKLIST = 'logWriterComponentBlacklist';
+
     /**
      * @param string $path
      * @return mixed
@@ -80,5 +82,10 @@ class ConfigurationService
     public static function getLogWriterLevel(): string
     {
         return (string)self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
+    }
+
+    public static function getLogWriterComponentBlacklist(): string
+    {
+        return (string)self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_BLACKLIST);
     }
 }

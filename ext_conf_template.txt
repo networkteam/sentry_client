@@ -2,7 +2,7 @@
 dsn =
 # cat=Sentry/; type=options[none,userid,usernameandemail]; label=Report user information
 reportUserInformation = userid
-# cat=Sentry/; type=text; label=Exception message blacklist regex: Use to not report them. Example: /an exception message/
+# cat=Sentry/; type=text; label=Exception/LogWriter message blacklist regex: Use to not report them. Example: /an exception message/
 messageBlacklistRegex =
 # cat=Sentry/; type=boolean; label=Report database connection errors: Such service outages should better be handled by a monitoring system
 reportDatabaseConnectionErrors = 0
@@ -12,3 +12,5 @@ release =
 showEventId = 1
 # cat=Sentry/; type=options[,warning,error]; label=LogWriter level: The LogWriter reports errors which are normally just logged. This is an experimental feature.
 logWriterLogLevel =
+# cat=Sentry/; type=array; label=LogWriter component blacklist: Comma separated list of LogRecord components which should not be reported. Example: TYPO3.CMS.Frontend.Controller.TypoScriptFrontendController
+logWriterComponentBlacklist =
