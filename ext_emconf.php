@@ -2,9 +2,9 @@
 
 $EM_CONF['sentry_client'] = [
     'title' => 'Sentry Client',
-    'description' => 'Sentry Client for TYPO3 - https://www.getsentry.com/',
+    'description' => 'A Sentry client for TYPO3. It forwards errors and exceptions to Sentry - https://sentry.io/',
     'category' => 'services',
-    'version' => '3.1.0',
+    'version' => '4.0.0',
     'state' => 'stable',
     'author' => 'Christoph Lehmann',
     'author_email' => 'christoph.lehmann@networkteam.com',

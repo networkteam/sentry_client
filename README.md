@@ -61,6 +61,7 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 * Report user information: Select one of `none` | `userid` | `usernameandemail`
 * Blacklist exception message regular expression
 * LogWriter Loglevel: If set, log messages are reported to Sentry
+* LogWriter Component blacklist
 
 ## How to test if the extension works?
 
@@ -83,6 +84,13 @@ https://github.com/networkteam/sentry_client
 There is a Slack channel #ext-sentry_client
 
 ## Changelog
+
+### 4.0.0
+
+* Add stacktrace to LogWriter messages for message grouping in Sentry
+* Add LogWriter component blacklist
+* Add v11.5 support
+* Drop v9.5 support
 
 ### 3.0..3.1
 

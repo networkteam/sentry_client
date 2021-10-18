@@ -1,6 +1,6 @@
 {
   "name": "networkteam/sentry-client",
-  "description": "Sentry Client for TYPO3",
+  "description": "A Sentry client for TYPO3. It forwards errors and exceptions to Sentry - https://sentry.io/",
   "type": "typo3-cms-extension",
   "keywords": [
     "TYPO3",
