@@ -81,7 +81,7 @@ class Client implements SingletonInterface
     {
         configureScope(
             function (Scope $scope): void {
-                $userContext['ip_address'] = GeneralUtility::getIndpEnv('REMOTE_ADDR');
+                $userContext['ip_address'] = GeneralUtility::getIndpEnv('REMOTE_ADDR') ?: '127.0.0.1';
                 $reportUserInformation = ConfigurationService::getReportUserInformation();
                 if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
                     $context = GeneralUtility::makeInstance(Context::class);
