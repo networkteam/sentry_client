@@ -25,6 +25,9 @@ jobs:
           php-version: ${{ matrix.env.php }}
           tools: composer:v2
 
+      - name: Lint PHP files
+        run: find *.php Classes -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+
       - name: Validate composer.json and composer.lock
         run: composer validate
 
