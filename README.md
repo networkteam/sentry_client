@@ -1,5 +1,9 @@
 # Sentry Client for TYPO3
 
+![ci](https://github.com/networkteam/sentry_client/actions/workflows/ci.yml/badge.svg)
+![Latest release on GitHub](https://img.shields.io/github/v/release/networkteam/sentry_client?logo=github)
+![Latest TER release](https://shields.io/endpoint?url=https://typo3-badges.dev/badge/sentry_client/version/shields)
+
 TYPO3 logs error messages and exceptions to logfiles and the backend log module. This extension sends them to [Sentry](https://sentry.io/),
 a SaaS/self-hosted application which aggregates them and informs you by mail. In Sentry you see a enriched error messages with
 stacktrace, HTTP headers and submitted request/form data.
