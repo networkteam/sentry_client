@@ -13,6 +13,7 @@ jobs:
           # See version matrix @ https://typo3.org/cms/roadmap
           - { php: 7.2, typo3: 10.4 }
           - { php: 7.4, typo3: 11 }
+          - { php: 8.0, typo3: 11 }
 
     env: ${{ matrix.env }}
 
