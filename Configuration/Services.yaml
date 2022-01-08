@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Networkteam\SentryClient\Client:
+    public: true
+
+  Networkteam\SentryClient\EventListener\SystemInformationToolbarCollectorEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'SentryStatus'
+        event: TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent

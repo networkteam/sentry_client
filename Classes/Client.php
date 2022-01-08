@@ -162,4 +162,9 @@ class Client implements SingletonInterface
         }
         return new Severity($severityValue);
     }
+
+    public static function isInitialized(): bool
+    {
+        return self::$initialized;
+    }
 }

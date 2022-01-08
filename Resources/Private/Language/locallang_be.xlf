@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2022-07-01T21:45:00Z" product-name="sentry_client">
+        <header/>
+        <body>
+            <trans-unit id="systeminformation.active">
+                <source>Active</source>
+            </trans-unit>
+            <trans-unit id="systeminformation.inactive">
+                <source>Inactive</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
