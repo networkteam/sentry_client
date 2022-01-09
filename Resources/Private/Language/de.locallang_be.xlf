@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" target-language="de" datatype="plaintext" original="EXT:sentry_client/Resources/Private/Language/locallang_be.xlf" date="2022-07-01T21:45:00Z" product-name="sentry_client">
+        <header/>
+        <body>
+            <trans-unit id="systeminformation.active">
+                <target>Aktiv</target>
+            </trans-unit>
+            <trans-unit id="systeminformation.inactive">
+                <target>Inaktiv</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -10,20 +10,10 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 
 class SystemInformationToolbarCollectorEventListener
 {
-    /**
-     * @var LanguageService
-     */
-    protected $languageService;
-
-    public function __construct(LanguageService $languageService)
-    {
-        $this->languageService = $languageService;
-    }
-
     public function __invoke(SystemInformationToolbarCollectorEvent $event): void
     {
         $isActive = Client::isInitialized();
-        $label = $this->languageService->sL(
+        $label = $this->getLanguageService()->sL(
             'LLL:EXT:sentry_client/Resources/Private/Language/locallang_be.xlf:' . ($isActive ? 'systeminformation.active' : 'systeminformation.inactive')
         );
 
@@ -44,5 +34,10 @@ class SystemInformationToolbarCollectorEventListener
                 );
             }
         }
+    }
+
+    protected function getLanguageService(): LanguageService
+    {
+        return $GLOBALS['LANG'];
     }
 }
