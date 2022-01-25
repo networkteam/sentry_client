@@ -7,6 +7,7 @@ use Networkteam\SentryClient\Service\ExceptionBlacklistService;
 use Sentry\Event;
 use Sentry\EventId;
 use Sentry\Severity;
+use Sentry\Stacktrace;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Context\Context;
@@ -15,6 +16,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
 use function Sentry\captureException;
 use function Sentry\captureMessage;
 use function Sentry\configureScope;
@@ -31,11 +33,6 @@ class Client implements SingletonInterface
     {
         if (self::$initialized) {
             return true;
-        }
-
-        if (!Environment::isComposerMode()) {
-            $autoloadFile = __DIR__ . '/../vendor/autoload.php';
-            require_once($autoloadFile);
         }
 
         $dsn = ConfigurationService::getDsn();

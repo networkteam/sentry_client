@@ -12,12 +12,6 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
      */
     protected $eventId;
 
-    public function __construct()
-    {
-        parent::__construct();
-        Client::init();
-    }
-
     /**
      * @param \Throwable $exception The throwable object.
      * @throws \Exception
