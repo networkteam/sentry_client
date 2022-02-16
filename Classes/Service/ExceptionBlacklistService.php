@@ -25,8 +25,8 @@ class ExceptionBlacklistService
         }
 
         if (!ConfigurationService::reportDatabaseConnectionErrors()) {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-            if (!$queryBuilder->getConnection()->isConnected()) {
+            $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
+            if (!$connection->isConnected()) {
                 return false;
             }
         }
