@@ -46,7 +46,7 @@ class ExceptionBlacklistService
 
         $componentBlacklist = GeneralUtility::trimExplode(',', ConfigurationService::getLogWriterComponentBlacklist(), true);
         foreach ($componentBlacklist as $componentInBlacklist) {
-            if (StringUtility::beginsWith($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
+            if (str_starts_with($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
                 return false;
             }
         }
