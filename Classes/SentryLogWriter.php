@@ -8,7 +8,6 @@ use Sentry\Stacktrace;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Log\Writer\AbstractWriter;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 use function Sentry\withScope;
 
