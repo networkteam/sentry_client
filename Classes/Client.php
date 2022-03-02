@@ -16,6 +16,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\IpAnonymizationUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use function Sentry\captureException;
 use function Sentry\captureMessage;
@@ -81,7 +82,7 @@ class Client implements SingletonInterface
     {
         configureScope(
             function (Scope $scope): void {
-                $userContext['ip_address'] = GeneralUtility::getIndpEnv('REMOTE_ADDR') ?: '127.0.0.1';
+                $userContext['ip_address'] = self::getIpAddress();
                 $reportUserInformation = ConfigurationService::getReportUserInformation();
                 if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
                     $context = GeneralUtility::makeInstance(Context::class);
@@ -163,5 +164,17 @@ class Client implements SingletonInterface
     public static function isInitialized(): bool
     {
         return self::$initialized;
+    }
+
+    protected static function getIpAddress(): string
+    {
+        $ipAddress = GeneralUtility::getIndpEnv('REMOTE_ADDR');
+
+        if (!$ipAddress) {
+            return '127.0.0.1';
+        }
+
+        $ipMask = ConfigurationService::getIpMask();
+        return IpAnonymizationUtility::anonymizeIp($ipAddress, $ipMask);
     }
 }

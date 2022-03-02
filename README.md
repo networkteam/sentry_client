@@ -45,7 +45,13 @@ Since Sentry SDK 2.x there are [environment variables](https://docs.sentry.io/er
 SetEnv SENTRY_DSN http://public_key@your-sentry-server.com/project-id
 SetEnv SENTRY_RELEASE 1.0.7
 SetEnv SENTRY_ENVIRONMENT Staging
+
+SetEnv SENTRY_IP_MASK 0
 ```
+
+For masking/anonymizing the IP address \TYPO3\CMS\Core\Utility\IpAnonymizationUtility::anonymizeIp()
+is used (see: [Feature: #84053 - API to anonymize IP addresses](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/7.6.x/Feature-84053-APIToAnonymizeIPAddresses.html)).
+Possible values are null, 0, 1, 2. For compatibility reasons the default value here is 0.
 
 ### LogWriter
 

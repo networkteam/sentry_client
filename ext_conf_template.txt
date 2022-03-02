@@ -8,6 +8,8 @@ messageBlacklistRegex =
 reportDatabaseConnectionErrors = 0
 # cat=Sentry/; type=string; label=Release: See https://docs.sentry.io/error-reporting/configuration/?platform=php#release, you can also use the SENTRY_RELEASE environment variable
 release =
+# cat=Sentry/; type=options[,null,0,1,2]; label=IP Mask: See https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/7.6.x/Feature-84053-APIToAnonymizeIPAddresses.html, you can also use the SENTRY_IP_MASK environment variable
+ip_mask = 0
 # cat=Sentry/; type=boolean; label=Show Event id
 showEventId = 1
 # cat=Sentry/; type=options[,warning,error]; label=LogWriter level: The LogWriter reports errors which are normally just logged. This is an experimental feature.
