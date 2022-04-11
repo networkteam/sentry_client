@@ -10,8 +10,6 @@ class ConfigurationService
 {
     const DSN = 'dsn';
 
-    const IP_MASK = 'ip_mask';
-
     const REPORT_USER_INFORMATION = 'reportUserInformation';
 
     const USER_INFORMATION_NONE = 'none';
@@ -49,17 +47,6 @@ class ConfigurationService
     public static function getEnvironment(): string
     {
         return getenv('SENTRY_ENVIRONMENT') ?: self::getNormalizedApplicationContext();
-    }
-
-    public static function getIpMask(): ?int
-    {
-        $ip_mask = getenv('SENTRY_IP_MASK') ?: self::getExtensionConfiguration(self::IP_MASK);
-
-        if ($ip_mask === 'null') {
-            return null;
-        }
-
-        return (int)$ip_mask;
     }
 
     public static function getRelease(): ?string
