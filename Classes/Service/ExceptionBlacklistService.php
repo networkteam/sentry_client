@@ -7,7 +7,6 @@ use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 class ExceptionBlacklistService
 {
@@ -46,7 +45,7 @@ class ExceptionBlacklistService
 
         $componentBlacklist = GeneralUtility::trimExplode(',', ConfigurationService::getLogWriterComponentBlacklist(), true);
         foreach ($componentBlacklist as $componentInBlacklist) {
-            if (StringUtility::beginsWith($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
+            if (str_starts_with($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
                 return false;
             }
         }
