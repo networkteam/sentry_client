@@ -17,7 +17,6 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\IpAnonymizationUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 use function Sentry\captureException;
 use function Sentry\captureMessage;
 use function Sentry\configureScope;
