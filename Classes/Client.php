@@ -128,11 +128,13 @@ class Client implements SingletonInterface
                 $requestId = $_SERVER['X-REQUEST-ID'] ?: $_SERVER['HTTP_X_REQUEST_ID'] ?: '';
 
                 $scope->setTags(
-                    [
+                    array_merge(
+                        [
                         'typo3_version' => GeneralUtility::makeInstance(Typo3Version::class)->getVersion(),
                         'typo3_mode' => $mode ?? '',
-                        'request_id' => $requestId,
-                    ]
+                        ],
+                        ($requestId ? ['request_id' => $requestId] : [])
+                    )
                 );
             }
         );
