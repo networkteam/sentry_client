@@ -125,11 +125,16 @@ class Client implements SingletonInterface
                     // deprecated in TYPO3 v11
                     $mode = TYPO3_MODE;
                 }
+                $requestId = $_SERVER['X-REQUEST-ID'] ?: $_SERVER['HTTP_X_REQUEST_ID'] ?: '';
+
                 $scope->setTags(
-                    [
+                    array_merge(
+                        [
                         'typo3_version' => GeneralUtility::makeInstance(Typo3Version::class)->getVersion(),
                         'typo3_mode' => $mode ?? '',
-                    ]
+                        ],
+                        ($requestId ? ['request_id' => $requestId] : [])
+                    )
                 );
             }
         );
