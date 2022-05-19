@@ -124,6 +124,8 @@ class Client implements SingletonInterface
                 } elseif (defined('TYPO3_MODE')) {
                     // deprecated in TYPO3 v11
                     $mode = TYPO3_MODE;
+                } else {
+                    $mode = '';
                 }
                 $requestId = $_SERVER['X-REQUEST-ID'] ?: $_SERVER['HTTP_X_REQUEST_ID'] ?: '';
                 $scope->setTags(
