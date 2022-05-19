@@ -68,6 +68,10 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 * LogWriter Loglevel: If set, log messages are reported to Sentry
 * LogWriter Component blacklist
 
+### Request ID
+
+If the web server has set a request ID header `X-Request-Id`, this is transmitted as a tag to trace errors to logs.
+
 ## How to test if the extension works?
 
 ```typescript
