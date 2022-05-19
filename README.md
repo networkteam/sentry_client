@@ -94,6 +94,12 @@ There is a Slack channel #ext-sentry_client
 
 ## Changelog
 
+### 4.1.0
+
+* Client IP is anonymized with `IpAnonymizationUtility::anonymizeIp()`. Thanks to @extcode
+* Add `X-Request-Id` as tag. Thanks to @bergo
+* Small code optimizations. Thanks to @tlueder and @LeoniePhiline
+
 ### 4.0.0
 
 * Add stacktrace to LogWriter messages for message grouping in Sentry
