@@ -82,6 +82,9 @@ class Client implements SingletonInterface
         configureScope(
             function (Scope $scope): void {
                 $userContext['ip_address'] = IpAnonymizationUtility::anonymizeIp(GeneralUtility::getIndpEnv('REMOTE_ADDR') ?? '127.0.0.1');
+                if ($userContext['ip_address'] === '') {
+                    unset($userContext['ip_address']);
+                }
                 $reportUserInformation = ConfigurationService::getReportUserInformation();
                 if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
                     $context = GeneralUtility::makeInstance(Context::class);
