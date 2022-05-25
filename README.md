@@ -81,7 +81,7 @@ page.20 {
   userFunc = Networkteam\SentryClient\Client->captureException
 }
 ```
-This triggers an exception which will be reported.
+This triggers an error that will be reported.
 
 ## Issue tracker
 
