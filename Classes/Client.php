@@ -86,7 +86,7 @@ class Client implements SingletonInterface
                     $userContext['ip_address'] = IpAnonymizationUtility::anonymizeIp($ipAddress);
                 }
                 $reportUserInformation = ConfigurationService::getReportUserInformation();
-                if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
+                if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST']) && $GLOBALS['TYPO3_REQUEST']->getAttribute('applicationType', false)) {
                     $context = GeneralUtility::makeInstance(Context::class);
                     if (
                         class_exists(ApplicationType::class) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()
@@ -124,7 +124,7 @@ class Client implements SingletonInterface
     {
         configureScope(
             function (Scope $scope): void {
-                if (isset($GLOBALS['TYPO3_REQUEST']) && class_exists(ApplicationType::class)) {
+                if (isset($GLOBALS['TYPO3_REQUEST']) && $GLOBALS['TYPO3_REQUEST']->getAttribute('applicationType', false) && class_exists(ApplicationType::class)) {
                     $mode = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend() ? 'FE' : 'BE';
                 } elseif (defined('TYPO3_MODE')) {
                     // deprecated in TYPO3 v11
