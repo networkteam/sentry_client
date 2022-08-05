@@ -29,8 +29,13 @@ class SentryLogWriter extends AbstractWriter
                     $scope->setExtra('data', $record->getData());
                 }
                 $scope->setTag('source', 'logwriter');
+                
+                $message = $record->getMessage();
+                if (method_exists($this, 'interpolate')) {
+                    $message = $this->interpolate($message, $record->getData());
+                }
 
-                Client::captureMessage($record->getMessage(), $record->getLevel());
+                Client::captureMessage($message, $record->getLevel());
             });
         }
 
