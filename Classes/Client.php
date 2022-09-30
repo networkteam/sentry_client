@@ -48,8 +48,7 @@ class Client implements SingletonInterface
                 $options['http_proxy'] = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
             }
 
-            // Enrich LogWriter messages with stackstrace to have a better event grouping. Log messages often contain
-            // dynamic variables like file names and thus they are not groupable by message.
+            // Enrich LogWriter messages with stackstrace
             $options['attach_stacktrace'] = true;
             $options['before_send'] = function (Event $event): Event {
                 return SentryLogWriter::cleanupStacktrace($event);
