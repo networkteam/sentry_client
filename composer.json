@@ -46,5 +46,13 @@
       "typo3/cms-composer-installers": true,
       "typo3/class-alias-loader": true
     }
+  },
+  "require-dev": {
+    "saschaegerer/phpstan-typo3": "^1.1"
+  },
+  "scripts": {
+    "phpstan": [
+      "phpstan analyse -c phpstan.neon"
+    ]
   }
 }
