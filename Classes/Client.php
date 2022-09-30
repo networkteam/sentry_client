@@ -4,10 +4,10 @@ namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
+use Psr\Http\Message\ServerRequestInterface;
 use Sentry\Event;
 use Sentry\EventId;
 use Sentry\Severity;
-use Sentry\Stacktrace;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Context\Context;
@@ -85,12 +85,13 @@ class Client implements SingletonInterface
                     $userContext['ip_address'] = IpAnonymizationUtility::anonymizeIp($ipAddress);
                 }
                 $reportUserInformation = ConfigurationService::getReportUserInformation();
-                if ($reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE && isset($GLOBALS['TYPO3_REQUEST'])) {
+                if (
+                    $reportUserInformation !== ConfigurationService::USER_INFORMATION_NONE &&
+                    ($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
+                ) {
                     $context = GeneralUtility::makeInstance(Context::class);
-                    if (
-                        class_exists(ApplicationType::class) && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()
-                        || TYPO3_MODE === 'FE'
-                    ) {
+
+                    if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
                         $frontendUserAspect = $context->getAspect('frontend.user');
                         if ($frontendUserAspect->isLoggedIn()) {
                             $userObject = $GLOBALS['TSFE']->fe_user->user;
@@ -104,7 +105,7 @@ class Client implements SingletonInterface
 
                     if (isset($userObject)) {
                         $userContext['id'] = $userObject['uid'];
-                        if (ConfigurationService::getReportUserInformation() === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
+                        if ($reportUserInformation === ConfigurationService::USER_INFORMATION_USERNAMEEMAIL) {
                             $userContext['username'] = $userObject['username'];
                             if (isset($userObject['email'])) {
                                 $userContext['email'] = $userObject['email'];
@@ -123,19 +124,18 @@ class Client implements SingletonInterface
     {
         configureScope(
             function (Scope $scope): void {
-                if (isset($GLOBALS['TYPO3_REQUEST']) && class_exists(ApplicationType::class)) {
-                    $mode = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend() ? 'FE' : 'BE';
-                } elseif (defined('TYPO3_MODE')) {
-                    // deprecated in TYPO3 v11
-                    $mode = TYPO3_MODE;
-                } else {
-                    $mode = '';
+                if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface) {
+                    if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+                        $requestType = 'frontend';
+                    } elseif (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
+                        $requestType = 'backend';
+                    }
                 }
                 $requestId = $_SERVER['X-REQUEST-ID'] ?? $_SERVER['HTTP_X_REQUEST_ID'] ?? '';
                 $scope->setTags(
                     array_merge(
                         ['typo3_version' => GeneralUtility::makeInstance(Typo3Version::class)->getVersion()],
-                        ($mode ? ['typo3_mode' => $mode] : []),
+                        (($requestType ?? false) ? ['request_type' => $requestType] : []),
                         ($requestId ? ['request_id' => $requestId] : [])
                     )
                 );

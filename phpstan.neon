@@ -16,5 +16,4 @@ parameters:
 
   reportUnmatchedIgnoredErrors: false
   ignoreErrors:
-    - '#Constant TYPO3_MODE not found#'
     - '#parameter \$contentObjectConfiguration with no value type specified in iterable type array#'
