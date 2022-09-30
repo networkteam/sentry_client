@@ -34,7 +34,6 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client']['dsn'] = 'http://publ
 
 // LocalConfiguration.php (New since 3.0!!!)
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'Networkteam\SentryClient\ProductionExceptionHandler';
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = 'Networkteam\SentryClient\DebugExceptionHandler';
 ```
 
 ### Environment variables
@@ -93,6 +92,12 @@ https://github.com/networkteam/sentry_client
 There is a Slack channel #ext-sentry_client
 
 ## Changelog
+
+### 4.2.0
+
+* Add log message interpolation (Thanks to @sascha-egerer)
+* Add Fingerprint to log messages
+* Deprecated: Usage of DebugExceptionHandler
 
 ### 4.1.0
 
