@@ -3,6 +3,7 @@
 namespace Networkteam\SentryClient\EventListener;
 
 use Networkteam\SentryClient\Client;
+use Networkteam\SentryClient\ProductionExceptionHandler;
 use Networkteam\SentryClient\Service\ConfigurationService;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
 use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
@@ -12,9 +13,10 @@ class SystemInformationToolbarCollectorEventListener
 {
     public function __invoke(SystemInformationToolbarCollectorEvent $event): void
     {
-        $isActive = Client::isInitialized();
+        $isActive = !empty(ConfigurationService::getDsn())
+            && $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] === ProductionExceptionHandler::class;
         $label = $this->getLanguageService()->sL(
-            'LLL:EXT:sentry_client/Resources/Private/Language/locallang_be.xlf:' . ($isActive ? 'systeminformation.active' : 'systeminformation.inactive')
+            'LLL:EXT:sentry_client/Resources/Private/Language/locallang_be.xlf:systeminformation.' . ($isActive ? 'active' : 'inactive')
         );
 
         $event->getToolbarItem()->addSystemInformation(
