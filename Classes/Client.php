@@ -9,6 +9,7 @@ use Sentry\Event;
 use Sentry\EventId;
 use Sentry\Severity;
 use Sentry\State\Scope;
+use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Http\ApplicationType;
@@ -92,11 +93,13 @@ class Client implements SingletonInterface
                     $context = GeneralUtility::makeInstance(Context::class);
 
                     if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+                        /** @var UserAspect $frontendUserAspect */
                         $frontendUserAspect = $context->getAspect('frontend.user');
                         if ($frontendUserAspect->isLoggedIn()) {
                             $userObject = $GLOBALS['TSFE']->fe_user->user;
                         }
                     } else {
+                        /** @var UserAspect $backendUserAspect */
                         $backendUserAspect = $context->getAspect('backend.user');
                         if ($backendUserAspect->isLoggedIn()) {
                             $userObject = $GLOBALS['BE_USER']->user;
