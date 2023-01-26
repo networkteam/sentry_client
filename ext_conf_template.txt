@@ -8,6 +8,8 @@ messageBlacklistRegex =
 reportDatabaseConnectionErrors = 0
 # cat=Sentry/; type=string; label=Release: See https://docs.sentry.io/platforms/php/configuration/options/#release, you can also use the SENTRY_RELEASE environment variable
 release =
+# cat=Sentry/; type=string; label=Server name: See https://docs.sentry.io/platforms/php/configuration/options/#server-name, you can also use the SENTRY_SERVER_NAME environment variable
+serverName =
 # cat=Sentry/; type=boolean; label=Show Event id
 showEventId = 1
 # cat=Sentry/; type=options[,warning,error]; label=LogWriter level: The LogWriter reports errors which are normally just logged. This is an experimental feature.

@@ -44,6 +44,7 @@ Since Sentry SDK 2.x there are [environment variables](https://docs.sentry.io/pl
 SetEnv SENTRY_DSN http://public_key@your-sentry-server.com/project-id
 SetEnv SENTRY_RELEASE 1.0.7
 SetEnv SENTRY_ENVIRONMENT Staging
+SetEnv SENTRY_SERVER_NAME stage23
 ```
 
 ### LogWriter

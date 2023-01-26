@@ -54,6 +54,11 @@ class ConfigurationService
         return getenv('SENTRY_RELEASE') ?: self::getExtensionConfiguration('release');
     }
 
+    public static function getServerName(): ?string
+    {
+        return getenv('SENTRY_SERVER_NAME') ?:  self::getExtensionConfiguration('serverName');
+    }
+
     protected static function getNormalizedApplicationContext(): string
     {
         return preg_replace("/[^a-zA-Z0-9]/", "-", (string)Environment::getContext());
