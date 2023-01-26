@@ -38,7 +38,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'Networkteam\
 
 ### Environment variables
 
-Since Sentry SDK 2.x there are [environment variables](https://docs.sentry.io/error-reporting/configuration/?platform=php#dsn) which can be used, for example in a .htaccess file:
+Since Sentry SDK 2.x there are [environment variables](https://docs.sentry.io/platforms/php/configuration/options/#common-options) which can be used, for example in a .htaccess file:
 
 ```apacheconfig
 SetEnv SENTRY_DSN http://public_key@your-sentry-server.com/project-id
