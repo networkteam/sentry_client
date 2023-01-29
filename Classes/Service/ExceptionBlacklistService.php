@@ -35,7 +35,10 @@ class ExceptionBlacklistService
 
     public static function shouldHandleLogMessage(LogRecord $logRecord): bool
     {
-        if ($logRecord->getComponent() === 'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler') {
+        if (in_array($logRecord->getComponent(), [
+                'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler',
+                'TYPO3.CMS.Core.Error.ErrorHandler'
+        ])) {
             return false;
         }
 
