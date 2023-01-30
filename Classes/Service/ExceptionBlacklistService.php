@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Networkteam\SentryClient\Service;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Error\Http\BadRequestException;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
 use TYPO3\CMS\Core\Log\LogRecord;
@@ -18,7 +19,8 @@ class ExceptionBlacklistService
 
         if (
             $exception instanceof ImmediateResponseException ||
-            $exception instanceof PageNotFoundException
+            $exception instanceof PageNotFoundException ||
+            $exception instanceof BadRequestException
         ) {
             return false;
         }
