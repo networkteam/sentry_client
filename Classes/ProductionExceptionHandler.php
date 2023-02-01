@@ -3,6 +3,7 @@
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
+use Networkteam\SentryClient\Service\SentryService;
 use Sentry\EventId;
 
 class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExceptionHandler
@@ -11,6 +12,12 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
      * @var EventId
      */
     protected $eventId;
+
+    public function __construct()
+    {
+        parent::__construct();
+        SentryService::inititalize();
+    }
 
     /**
      * @param \Throwable $exception The throwable object.

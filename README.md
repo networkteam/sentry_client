@@ -59,7 +59,7 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 ### Feature Toggles
 
 * Ignore database connection errors (they should better be handled by a monitoring system)
-* Report user information: Select one of `none` | `userid` | `usernameandemail`
+* Report user information: Select one of `none` | `userid`
 * Blacklist exception message regular expression
 * LogWriter Loglevel: If set, log messages are reported to Sentry
 * LogWriter Component blacklist

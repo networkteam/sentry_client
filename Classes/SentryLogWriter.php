@@ -3,12 +3,12 @@
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ExceptionBlacklistService;
+use Networkteam\SentryClient\Service\SentryService;
 use Sentry\Event;
 use Sentry\Stacktrace;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Log\Writer\AbstractWriter;
-
 use function Sentry\withScope;
 
 class SentryLogWriter extends AbstractWriter
@@ -22,7 +22,9 @@ class SentryLogWriter extends AbstractWriter
      */
     public function writeLog(LogRecord $record)
     {
-        if (ExceptionBlacklistService::shouldHandleLogMessage($record) && Client::init()) {
+        if (SentryService::isEnabled()
+            && ExceptionBlacklistService::shouldHandleLogMessage($record)
+        ) {
             withScope(function (Scope $scope) use ($record): void {
                 $scope->setExtra('component', $record->getComponent());
                 if ($record->getData()) {

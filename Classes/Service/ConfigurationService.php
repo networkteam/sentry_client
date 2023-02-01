@@ -2,9 +2,7 @@
 declare(strict_types = 1);
 namespace Networkteam\SentryClient\Service;
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationService
 {
@@ -13,8 +11,6 @@ class ConfigurationService
     const REPORT_USER_INFORMATION = 'reportUserInformation';
 
     const USER_INFORMATION_NONE = 'none';
-
-    const USER_INFORMATION_USERNAMEEMAIL = 'usernameandemail';
 
     const MESSAGE_BLACKLIST_REGEX = 'messageBlacklistRegex';
 
@@ -26,22 +22,21 @@ class ConfigurationService
 
     const LOGWRITER_COMPONENT_BLACKLIST = 'logWriterComponentBlacklist';
 
-    /**
-     * @param string $path
-     * @return mixed
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
-     */
-    protected static function getExtensionConfiguration(string $path)
+    protected static function getExtensionConfiguration(string $path): mixed
     {
-        /** @var ExtensionConfiguration $extensionConfiguration */
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
-        return $extensionConfiguration->get('sentry_client', $path);
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client'][$path] ?? null;
+    }
+
+    public static function getExtConf(): ?array
+    {
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options'];
     }
 
     public static function getDsn(): ?string
     {
-        return getenv('SENTRY_DSN') ?: self::getExtensionConfiguration(self::DSN);
+        $dsn = getenv('SENTRY_DSN') ?: self::getExtensionConfiguration(self::DSN);
+
+        return !empty($dsn) ? $dsn : null;
     }
 
     public static function getEnvironment(): string
