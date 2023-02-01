@@ -2,7 +2,6 @@
 
 ![ci](https://github.com/networkteam/sentry_client/actions/workflows/ci.yml/badge.svg)
 ![Latest release on GitHub](https://img.shields.io/github/v/release/networkteam/sentry_client?logo=github)
-![Latest TER release](https://shields.io/endpoint?url=https://typo3-badges.dev/badge/sentry_client/version/shields)
 ![Downloads per month](https://img.shields.io/packagist/dm/networkteam/sentry-client?style=plastic)
 
 TYPO3 logs error messages and exceptions to logfiles and the backend log module. This extension sends them to [Sentry](https://sentry.io/),
@@ -17,14 +16,12 @@ TYPO3 throws a lot of PHP Notices and they are not really interesting in product
 
 ## Installation
 
-The preferred way is with Composer:
-
 ```bash
 $ composer require networkteam/sentry-client
 ```
 
-The [TER version](http://typo3.org/extensions/repository/view/sentry_client) includes some composer dependencies locally,
-which may lead to problems in the future (one package with multiple version in the project).
+The [TER version](https://typo3.org/extensions/repository/view/sentry_client) will not receive updates anymore. Feel free
+to send us a crate of beer and we will make a new TER release.
 
 ## Configuration
 
