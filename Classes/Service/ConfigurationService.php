@@ -29,7 +29,7 @@ class ConfigurationService
 
     public static function getExtConf(): ?array
     {
-        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options'];
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options'] ?? null;
     }
 
     public static function getDsn(): ?string
@@ -49,9 +49,9 @@ class ConfigurationService
         return getenv('SENTRY_RELEASE') ?: self::getExtensionConfiguration('release');
     }
 
-    protected static function getNormalizedApplicationContext(): string
+    protected static function getNormalizedApplicationContext(): ?string
     {
-        return preg_replace("/[^a-zA-Z0-9]/", "-", (string)Environment::getContext());
+        return preg_replace("/[^a-zA-Z0-9]/", "-", Environment::getContext()->__toString());
     }
 
     public static function getReportUserInformation(): string

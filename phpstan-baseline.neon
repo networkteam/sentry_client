@@ -1,0 +1,11 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Networkteam\\\\SentryClient\\\\Content\\\\ProductionExceptionHandler\\:\\:handle\\(\\) has parameter \\$contentObjectConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Classes/Content/ProductionExceptionHandler.php
+
+		-
+			message: "#^Method Networkteam\\\\SentryClient\\\\Service\\\\ConfigurationService\\:\\:getExtConf\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Classes/Service/ConfigurationService.php

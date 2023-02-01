@@ -11,6 +11,7 @@ use Sentry\SentrySdk;
 use Sentry\State\Scope;
 use Sentry\UserDataBag;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\UserAspect;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\IpAnonymizationUtility;
 
@@ -39,25 +40,27 @@ final class UserIntegration implements IntegrationInterface
     {
         $userData = [];
         $ipAddress = GeneralUtility::getIndpEnv('REMOTE_ADDR');
-        if (!empty($ipAddress)) {
+        if (is_string($ipAddress) && !empty($ipAddress)) {
             $userData['ip_address'] = IpAnonymizationUtility::anonymizeIp($ipAddress);
         }
 
         try {
             $context = GeneralUtility::makeInstance(Context::class);
             if ($context->hasAspect('backend.user')) {
+                /** @var UserAspect $backendUserAspect */
                 $backendUserAspect = $context->getAspect('backend.user');
                 if ($backendUserAspect->isLoggedIn()) {
                     $userData['Backend user'] = $backendUserAspect->get('id');
                 }
             }
             if ($context->hasAspect('frontend.user')) {
+                /** @var UserAspect $frontendUserAspect */
                 $frontendUserAspect = $context->getAspect('frontend.user');
                 if ($frontendUserAspect->isLoggedIn()) {
                     $userData['Frontend user'] = $frontendUserAspect->get('id');
                 }
             }
-        } catch (\Throwable) {}
+        } catch (\Throwable $throwable) {}
 
         $event->setUser(UserDataBag::createFromArray($userData));
     }

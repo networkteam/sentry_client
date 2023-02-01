@@ -8,10 +8,7 @@ use Sentry\EventId;
 
 class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExceptionHandler
 {
-    /**
-     * @var EventId
-     */
-    protected $eventId;
+    protected ?EventId $eventId = null;
 
     public function __construct()
     {
