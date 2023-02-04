@@ -12,7 +12,9 @@ use function Sentry\captureMessage;
 
 class Client
 {
-
+    /**
+     * Send an exception to Sentry
+     */
     public static function captureException(\Throwable $exception): ?EventId
     {
         if (ExceptionBlacklistService::shouldHandleException($exception)) {
@@ -23,6 +25,9 @@ class Client
         return null;
     }
 
+    /**
+     * Send a message to Sentry
+     */
     public static function captureMessage(string $message, string $loglevel = 'info'): ?EventId
     {
         if (SentryService::isEnabled()) {
