@@ -39,4 +39,16 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
         }
         return parent::getTitle($exception);
     }
+
+    /**
+     * Writes an exception in the sys_log table
+     */
+    protected function writeLog(string $logMessage)
+    {
+        if (SentryService::isEnabled() && ConfigurationService::shouldDisableDatabaseLogging()) {
+            return;
+        }
+
+        parent::writeLog($logMessage);
+    }
 }

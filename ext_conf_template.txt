@@ -14,3 +14,5 @@ showEventId = 1
 logWriterLogLevel =
 # cat=Sentry/; type=array; label=LogWriter component blacklist: Comma separated list of LogRecord components which should not be reported. Example: TYPO3.CMS.Frontend.Controller.NoisyController
 logWriterComponentBlacklist =
+# cat=Sentry/; type=boolean; label=Disable database logging: TYPO3 logs exceptions to the database and to a log file. With this you can disable the database logging.
+disableDatabaseLogging = 0

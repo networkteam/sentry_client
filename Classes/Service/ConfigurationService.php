@@ -22,6 +22,8 @@ class ConfigurationService
 
     const LOGWRITER_COMPONENT_BLACKLIST = 'logWriterComponentBlacklist';
 
+    const DISABLE_DATABASE_LOG = 'disableDatabaseLogging';
+
     protected static function getExtensionConfiguration(string $path): mixed
     {
         return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client'][$path] ?? null;
@@ -82,5 +84,10 @@ class ConfigurationService
     public static function getLogWriterComponentBlacklist(): string
     {
         return (string)self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_BLACKLIST);
+    }
+
+    public static function shouldDisableDatabaseLogging(): bool
+    {
+        return (bool)self::getExtensionConfiguration(self::DISABLE_DATABASE_LOG);
     }
 }
