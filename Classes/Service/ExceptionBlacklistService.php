@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Networkteam\SentryClient\Service;
 
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use Doctrine\DBAL\Exception\ConnectionException;
 use TYPO3\CMS\Core\Error\Http\BadRequestException;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
@@ -25,11 +25,10 @@ class ExceptionBlacklistService
             return false;
         }
 
-        if (!ConfigurationService::reportDatabaseConnectionErrors()) {
-            $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('pages');
-            if (!$connection->isConnected()) {
-                return false;
-            }
+        if (!ConfigurationService::reportDatabaseConnectionErrors() &&
+            $exception instanceof ConnectionException
+        ) {
+            return false;
         }
 
         return true;
