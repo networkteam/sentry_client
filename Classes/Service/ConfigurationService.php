@@ -49,7 +49,7 @@ class ConfigurationService
         return getenv('SENTRY_RELEASE') ?: self::getExtensionConfiguration('release');
     }
 
-    protected static function getNormalizedApplicationContext(): ?string
+    protected static function getNormalizedApplicationContext(): string
     {
         return preg_replace("/[^a-zA-Z0-9]/", "-", Environment::getContext()->__toString());
     }
