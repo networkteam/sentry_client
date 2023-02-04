@@ -1,5 +1,6 @@
 includes:
   - phpstan-baseline.neon
+  - vendor/saschaegerer/phpstan-typo3/extension.neon
 
 parameters:
   # 0: basic checks
