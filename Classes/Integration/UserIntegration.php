@@ -64,9 +64,4 @@ final class UserIntegration implements IntegrationInterface
 
         $event->setUser(UserDataBag::createFromArray($userData));
     }
-
-    protected function getServerRequest(): ?ServerRequestInterface
-    {
-        return $GLOBALS['TYPO3_REQUEST'] ?? null;
-    }
 }
