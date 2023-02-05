@@ -4,7 +4,6 @@ namespace Networkteam\SentryClient\Content;
 
 use Networkteam\SentryClient\Client;
 use Networkteam\SentryClient\Service\ConfigurationService;
-use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;

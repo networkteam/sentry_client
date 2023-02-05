@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Networkteam\SentryClient\Service;
 
+use Networkteam\SentryClient\Integration\BlacklistIntegration;
 use Networkteam\SentryClient\Integration\Typo3Integration;
 use Networkteam\SentryClient\Integration\UserIntegration;
 use Networkteam\SentryClient\SentryLogWriter;
@@ -53,6 +54,7 @@ class SentryService
         $options = array_merge($options, $extConf);
 
         $integrations = array_merge([
+            BlacklistIntegration::class => ['enabled' => true],
             RequestIntegration::class => ['enabled' => true],
             FrameContextifierIntegration::class => ['enabled' => true],
             EnvironmentIntegration::class => ['enabled' => true],

@@ -2,8 +2,9 @@
 
 namespace Networkteam\SentryClient;
 
-use Networkteam\SentryClient\Service\ExceptionBlacklistService;
+use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\SentryService;
+use Networkteam\SentryClient\Trait\MessageBlacklist;
 use Sentry\Event;
 use Sentry\Stacktrace;
 use Sentry\State\Scope;
@@ -13,24 +14,28 @@ use function Sentry\withScope;
 
 class SentryLogWriter extends AbstractWriter
 {
+    use MessageBlacklist;
+
+    protected const SOURCE_TAG = 'source';
+
+    protected const SOURCE_IDENTIFIER = 'logwriter';
 
     /**
      * Forwards the log record to Sentry
      *
-     * @param LogRecord $record Log record
      * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
     public function writeLog(LogRecord $record)
     {
         if (SentryService::isEnabled()
-            && ExceptionBlacklistService::shouldHandleLogMessage($record)
+            && $this->shouldHandleLogMessage($record)
         ) {
             withScope(function (Scope $scope) use ($record): void {
                 $scope->setExtra('component', $record->getComponent());
                 if ($record->getData()) {
                     $scope->setExtra('data', $record->getData());
                 }
-                $scope->setTag('source', 'logwriter');
+                $scope->setTag(self::SOURCE_TAG, self::SOURCE_IDENTIFIER);
                 $scope->setFingerprint([
                     $record->getMessage(),
                     $record->getComponent()
@@ -48,9 +53,29 @@ class SentryLogWriter extends AbstractWriter
         return $this;
     }
 
+    protected function shouldHandleLogMessage(LogRecord $logRecord): bool
+    {
+        if ($this->isMessageBlacklisted($logRecord->getMessage())) {
+            return false;
+        }
+
+        $componentBlacklist = array_merge([
+            'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler',
+            'TYPO3.CMS.Core.Error.ErrorHandler'
+        ], ConfigurationService::getLogWriterComponentBlacklist());
+
+        foreach ($componentBlacklist as $componentInBlacklist) {
+            if (str_starts_with($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function cleanupStacktrace(Event $event): Event
     {
-        if (($event->getTags()['source'] ?? false) === 'logwriter') {
+        if (($event->getTags()[self::SOURCE_TAG] ?? false) === self::SOURCE_IDENTIFIER) {
             $stacktrace = $event->getStacktrace();
             if ($stacktrace instanceof Stacktrace) {
                 foreach($stacktrace->getFrames() as $no => $frame) {

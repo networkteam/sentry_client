@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Networkteam\SentryClient\Service;
 
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationService
 {
@@ -81,9 +82,12 @@ class ConfigurationService
         return (string)self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
     }
 
-    public static function getLogWriterComponentBlacklist(): string
+    /**
+     * @return string[]
+     */
+    public static function getLogWriterComponentBlacklist(): array
     {
-        return (string)self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_BLACKLIST);
+        return GeneralUtility::trimExplode(',', self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_BLACKLIST), true);
     }
 
     public static function shouldDisableDatabaseLogging(): bool

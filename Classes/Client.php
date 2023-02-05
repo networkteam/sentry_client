@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Networkteam\SentryClient;
 
-use Networkteam\SentryClient\Service\ExceptionBlacklistService;
-Use Networkteam\SentryClient\Service\SentryService;
 use Sentry\EventId;
 use Sentry\Severity;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -17,12 +15,7 @@ class Client
      */
     public static function captureException(\Throwable $exception): ?EventId
     {
-        if (ExceptionBlacklistService::shouldHandleException($exception)) {
-            $eventId = captureException($exception);
-            return $eventId;
-        }
-
-        return null;
+        return captureException($exception);
     }
 
     /**
@@ -30,11 +23,7 @@ class Client
      */
     public static function captureMessage(string $message, string $loglevel = 'info'): ?EventId
     {
-        if (SentryService::isEnabled()) {
-            return captureMessage($message, self::createSeverity($loglevel));
-        }
-
-        return null;
+        return captureMessage($message, self::createSeverity($loglevel));
     }
 
     protected static function createSeverity(string $loglevel): Severity
