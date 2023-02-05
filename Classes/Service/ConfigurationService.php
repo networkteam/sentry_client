@@ -32,7 +32,7 @@ class ConfigurationService
 
     public static function getExtConf(): ?array
     {
-        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options'] ?? null;
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client'] ?? null;
     }
 
     public static function getDsn(): ?string

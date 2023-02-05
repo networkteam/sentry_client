@@ -31,8 +31,6 @@ class SentryService
             return false;
         }
 
-        $reportUserInformation = ConfigurationService::getReportUserInformation() !== ConfigurationService::USER_INFORMATION_NONE;
-
         $options = [
             'dsn' => ConfigurationService::getDsn(),
             'release' => ConfigurationService::getRelease(),
@@ -44,33 +42,35 @@ class SentryService
                 return SentryLogWriter::cleanupStacktrace($event);
             },
             'default_integrations' => false,
-            'error_types' => E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED
+            'error_types' => E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED,
+            'integrations' => [
+                10 => BlacklistIntegration::class,
+                20 => RequestIntegration::class,
+                30 => FrameContextifierIntegration::class,
+                40 => EnvironmentIntegration::class,
+                50 => FatalErrorListenerIntegration::class,
+                60 => ErrorListenerIntegration::class,
+                70 => Typo3Integration::class
+            ]
         ];
 
-        $extConf = ConfigurationService::getExtConf() ?? [];
-        $integrations = $extConf['integrations'] ?? [];
-        unset($extConf['integrations']);
-
-        $options = array_merge($options, $extConf);
-
-        $integrations = array_merge([
-            BlacklistIntegration::class => ['enabled' => true],
-            RequestIntegration::class => ['enabled' => true],
-            FrameContextifierIntegration::class => ['enabled' => true],
-            EnvironmentIntegration::class => ['enabled' => true],
-            FatalErrorListenerIntegration::class => ['enabled' => true],
-            ErrorListenerIntegration::class => ['enabled' => true],
-            Typo3Integration::class => ['enabled' => true],
-            UserIntegration::class => ['enabled' => $reportUserInformation]
-        ], $integrations);
-
-        foreach ($integrations as $className => $integrationConfiguration) {
-            if (($integrationConfiguration['enabled'] ?? false)
-                && class_exists($className)
-            ) {
-                $options['integrations'][] = new $className();
-            }
+        if (ConfigurationService::getReportUserInformation() !== ConfigurationService::USER_INFORMATION_NONE) {
+            $options['integrations'][80] = UserIntegration::class;
         }
+
+        $extConf = ConfigurationService::getExtConf();
+        if (is_array($extConf['options'] ?? null)) {
+            $options = array_merge($options, $options);
+        }
+        if (is_callable($extConf['modifyOptions'] ?? null)) {
+            $options = call_user_func($extConf['modifyOptions'], $options);
+        }
+
+        $integrations = [];
+        foreach ($options['integrations'] as $className) {
+            $integrations[] = new $className();
+        }
+        $options['integrations'] = $integrations;
 
         init($options);
         self::$isEnabled = true;
