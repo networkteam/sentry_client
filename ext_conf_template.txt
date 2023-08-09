@@ -1,5 +1,7 @@
 # cat=Sentry/; type=text; label=DSN: http://public_key@your-sentry-server.com/project-id, you can also use the SENTRY_DSN environment variable
 dsn =
+# cat=Sentry/; type=boolean; label=Disable sentry integration, even if the extension is installed (for example for dev environments)
+disableSentry = 0
 # cat=Sentry/; type=options[none,userid,usernameandemail]; label=Report user information
 reportUserInformation = userid
 # cat=Sentry/; type=text; label=Exception/LogWriter message blacklist regex: Use it to not report them. Example: /an exception message/

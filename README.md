@@ -67,6 +67,23 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 * LogWriter Loglevel: If set, log messages are reported to Sentry
 * LogWriter Component blacklist
 
+### Disable in dev environments
+
+If you want to keep the extension installed and configured but want to disable it (i.e. temporarily or in certain
+TYPO3 contexts), you can either set the environment variable:
+
+```
+SENTRY_DISABLE=1
+```
+
+Or set it in TYPO3 based on some condition, for example in your `AdditionalConfiguration.php`
+aka `config/system/additional.php`:
+```php
+if (\TYPO3\CMS\Core\Core\Environment::getContext()->isDevelopment()) {
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client']['disableSentry'] = true;
+}
+```
+
 ### Request ID
 
 If the web server has set a request ID header `X-Request-Id`, this is transmitted as a tag to trace errors to logs.

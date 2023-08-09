@@ -8,6 +8,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationService
 {
+    const DISABLE_SENTRY = 'disableSentry';
+
     const DSN = 'dsn';
 
     const REPORT_USER_INFORMATION = 'reportUserInformation';
@@ -37,6 +39,11 @@ class ConfigurationService
         /** @var ExtensionConfiguration $extensionConfiguration */
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
         return $extensionConfiguration->get('sentry_client', $path);
+    }
+
+    public static function isDisabled(): bool
+    {
+        return (bool)getenv('SENTRY_DISABLE') || (bool)self::getExtensionConfiguration(self::DISABLE_SENTRY);
     }
 
     public static function getDsn(): ?string
