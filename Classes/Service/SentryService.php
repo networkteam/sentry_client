@@ -60,7 +60,7 @@ class SentryService
 
         $extConf = ConfigurationService::getExtConf();
         if (is_array($extConf['options'] ?? null)) {
-            $options = array_merge($options, $options);
+            $options = array_merge($options, $extConf['options']);
         }
         if (is_callable($extConf['modifyOptions'] ?? null)) {
             $options = call_user_func($extConf['modifyOptions'], $options);
