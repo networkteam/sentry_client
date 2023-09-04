@@ -9,6 +9,7 @@ use Sentry\Event;
 use Sentry\Integration\IntegrationInterface;
 use Sentry\SentrySdk;
 use Sentry\State\Scope;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Information\Typo3Version;
 
@@ -36,12 +37,14 @@ final class Typo3Integration implements IntegrationInterface
     private function processEvent(Event $event): void
     {
         $request = $this->getServerRequest();
-        if ($request) {
+        if ($request instanceof ServerRequestInterface) {
             if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
                 $event->setTag('request_type', 'frontend');
             } elseif (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
                 $event->setTag('request_type', 'backend');
             }
+        } elseif (Environment::isCli()) {
+            $event->setTag('request_type', 'cli');
         }
 
         $requestId = $_SERVER['X-REQUEST-ID'] ?? $_SERVER['HTTP_X_REQUEST_ID'] ?? false;
