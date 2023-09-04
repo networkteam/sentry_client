@@ -60,9 +60,9 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['w
 
 * Ignore database connection errors (they should better be handled by a monitoring system)
 * Report user information: Select one of `none` | `userid`
-* Blacklist exception message regular expression
+* Ignore exception message regular expression
 * LogWriter Loglevel: If set, log messages are reported to Sentry
-* LogWriter Component blacklist
+* Ignore LogWriter Components
 
 ### Request ID
 
@@ -105,7 +105,7 @@ There is a Slack channel #ext-sentry_client
 ### 4.0.0
 
 * Add stacktrace to LogWriter messages for message grouping in Sentry
-* Add LogWriter component blacklist
+* Add LogWriter component ignorelist
 * Add v11.5 support
 * Drop v9.5 support
 

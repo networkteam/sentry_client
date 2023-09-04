@@ -13,7 +13,7 @@ class ConfigurationService
 
     const USER_INFORMATION_NONE = 'none';
 
-    const MESSAGE_BLACKLIST_REGEX = 'messageBlacklistRegex';
+    const IGNORE_MESSAGE_REGEX = 'ignoreMessageRegex';
 
     const REPORT_DATABASE_CONNECTION_ERRORS = 'reportDatabaseConnectionErrors';
 
@@ -21,7 +21,7 @@ class ConfigurationService
 
     const LOGWRITER_LOGLEVEL = 'logWriterLogLevel';
 
-    const LOGWRITER_COMPONENT_BLACKLIST = 'logWriterComponentBlacklist';
+    const LOGWRITER_COMPONENT_IGNORELIST = 'logWriterComponentIgnorelist';
 
     const DISABLE_DATABASE_LOG = 'disableDatabaseLogging';
 
@@ -62,9 +62,9 @@ class ConfigurationService
         return self::getExtensionConfiguration(self::REPORT_USER_INFORMATION);
     }
 
-    public static function getMessageBlacklistRegex(): ?string
+    public static function getIgnoreMessageRegex(): ?string
     {
-        return self::getExtensionConfiguration(self::MESSAGE_BLACKLIST_REGEX);
+        return self::getExtensionConfiguration('messageBlacklistRegex') ?? self::getExtensionConfiguration(self::IGNORE_MESSAGE_REGEX);
     }
 
     public static function reportDatabaseConnectionErrors(): bool
@@ -85,9 +85,10 @@ class ConfigurationService
     /**
      * @return string[]
      */
-    public static function getLogWriterComponentBlacklist(): array
+    public static function getLogWriterComponentIgnorelist(): array
     {
-        return GeneralUtility::trimExplode(',', self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_BLACKLIST), true);
+        $ignoreList = self::getExtensionConfiguration('logWriterComponentBlacklist') ?? self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_IGNORELIST);
+        return GeneralUtility::trimExplode(',', $ignoreList, true);
     }
 
     public static function shouldDisableDatabaseLogging(): bool

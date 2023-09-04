@@ -6,7 +6,7 @@ namespace Networkteam\SentryClient\Integration;
 
 use Doctrine\DBAL\Exception\ConnectionException;
 use Networkteam\SentryClient\Service\ConfigurationService;
-use Networkteam\SentryClient\Trait\MessageBlacklist;
+use Networkteam\SentryClient\Trait\IgnoreMessage;
 use Sentry\Event;
 use Sentry\Integration\IntegrationInterface;
 use Sentry\SentrySdk;
@@ -15,9 +15,9 @@ use TYPO3\CMS\Core\Error\Http\BadRequestException;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
 
-final class BlacklistIntegration implements IntegrationInterface
+final class IgnoreEventIntegration implements IntegrationInterface
 {
-    use MessageBlacklist;
+    use IgnoreMessage;
 
     public function setupOnce(): void
     {
@@ -44,7 +44,7 @@ final class BlacklistIntegration implements IntegrationInterface
                     ImmediateResponseException::class,
                     PageNotFoundException::class
                 ]) ||
-                $this->isMessageBlacklisted($exception->getValue()) ||
+                $this->shouldIgnoreMessage($exception->getValue()) ||
                 (
                     !ConfigurationService::reportDatabaseConnectionErrors() &&
                     $exception->getType() === ConnectionException::class

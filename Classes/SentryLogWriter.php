@@ -4,7 +4,7 @@ namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\SentryService;
-use Networkteam\SentryClient\Trait\MessageBlacklist;
+use Networkteam\SentryClient\Trait\IgnoreMessage;
 use Sentry\Event;
 use Sentry\Stacktrace;
 use Sentry\State\Scope;
@@ -14,7 +14,7 @@ use function Sentry\withScope;
 
 class SentryLogWriter extends AbstractWriter
 {
-    use MessageBlacklist;
+    use IgnoreMessage;
 
     protected const SOURCE_TAG = 'source';
 
@@ -55,17 +55,17 @@ class SentryLogWriter extends AbstractWriter
 
     protected function shouldHandleLogMessage(LogRecord $logRecord): bool
     {
-        if ($this->isMessageBlacklisted($logRecord->getMessage())) {
+        if ($this->shouldIgnoreMessage($logRecord->getMessage())) {
             return false;
         }
 
-        $componentBlacklist = array_merge([
+        $componentIgnorelist = array_merge([
             'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler',
             'TYPO3.CMS.Core.Error.ErrorHandler'
-        ], ConfigurationService::getLogWriterComponentBlacklist());
+        ], ConfigurationService::getLogWriterComponentIgnorelist());
 
-        foreach ($componentBlacklist as $componentInBlacklist) {
-            if (str_starts_with($logRecord->getComponent() . '.', $componentInBlacklist . '.')) {
+        foreach ($componentIgnorelist as $componentInIgnorelist) {
+            if (str_starts_with($logRecord->getComponent() . '.', $componentInIgnorelist . '.')) {
                 return false;
             }
         }

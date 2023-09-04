@@ -4,11 +4,11 @@ namespace Networkteam\SentryClient\Trait;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
 
-trait MessageBlacklist
+trait IgnoreMessage
 {
-    protected function isMessageBlacklisted(string $message): bool
+    protected function shouldIgnoreMessage(string $message): bool
     {
-        $regex = ConfigurationService::getMessageBlacklistRegex();
+        $regex = ConfigurationService::getIgnoreMessageRegex();
         if (!empty($regex) && !empty($message)) {
             return preg_match($regex, $message) === 1;
         }

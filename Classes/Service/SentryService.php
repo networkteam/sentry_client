@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Networkteam\SentryClient\Service;
 
-use Networkteam\SentryClient\Integration\BlacklistIntegration;
+use Networkteam\SentryClient\Integration\IgnoreEventIntegration;
 use Networkteam\SentryClient\Integration\Typo3Integration;
 use Networkteam\SentryClient\Integration\UserIntegration;
 use Networkteam\SentryClient\SentryLogWriter;
@@ -44,7 +44,7 @@ class SentryService
             'default_integrations' => false,
             'error_types' => E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED,
             'integrations' => [
-                10 => BlacklistIntegration::class,
+                10 => IgnoreEventIntegration::class,
                 20 => RequestIntegration::class,
                 30 => FrameContextifierIntegration::class,
                 40 => EnvironmentIntegration::class,
