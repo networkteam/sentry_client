@@ -22,7 +22,10 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
      */
     public function handleException(\Throwable $exception): void
     {
-        $this->eventId = Client::captureException($exception);
+        $ignoredCodes = array_merge(self::IGNORED_EXCEPTION_CODES, self::IGNORED_HMAC_EXCEPTION_CODES);
+        if (!in_array($exception->getCode(), $ignoredCodes, true)) {
+            $this->eventId = Client::captureException($exception);
+        }
         parent::handleException($exception);
     }
 
