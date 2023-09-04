@@ -40,8 +40,10 @@ final class Typo3Integration implements IntegrationInterface
         if ($request instanceof ServerRequestInterface) {
             if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
                 $event->setTag('request_type', 'frontend');
+                $this->setUrl($event, $request);
             } elseif (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
                 $event->setTag('request_type', 'backend');
+                $this->setUrl($event, $request);
             }
         } elseif (Environment::isCli()) {
             $event->setTag('request_type', 'cli');
@@ -53,6 +55,13 @@ final class Typo3Integration implements IntegrationInterface
         }
 
         $event->setTag('typo3_version', (new Typo3Version())->getVersion());
+    }
+
+    protected function setUrl(Event $event, ServerRequestInterface $request)
+    {
+        $requestData = $event->getRequest();
+        $requestData['url'] = $request->getUri()->__toString();
+        $event->setRequest($requestData);
     }
 
     protected function getServerRequest(): ?ServerRequestInterface
