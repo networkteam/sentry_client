@@ -57,7 +57,7 @@ final class Typo3Integration implements IntegrationInterface
         $event->setTag('typo3_version', (new Typo3Version())->getVersion());
     }
 
-    protected function setUrl(Event $event, ServerRequestInterface $request)
+    protected function setUrl(Event $event, ServerRequestInterface $request): void
     {
         $requestData = $event->getRequest();
         $requestData['url'] = $request->getUri()->__toString();
