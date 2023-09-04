@@ -15,15 +15,4 @@ call_user_func(function() {
             ],
         ];
     }
-
-    if (version_compare(\TYPO3\CMS\Core\Utility\VersionNumberUtility::getNumericTypo3Version(), '11', '<')) {
-        $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Imaging\IconRegistry::class
-        );
-        $iconRegistry->registerIcon(
-            'tx-sentryclient-sentry-glyph-light',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:sentry_client/Resources/Public/Icons/sentry-glyph-light.svg']
-        );
-    }
 });
