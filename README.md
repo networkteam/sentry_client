@@ -5,8 +5,8 @@
 ![Downloads per month](https://img.shields.io/packagist/dm/networkteam/sentry-client?style=plastic)
 
 TYPO3 logs error messages and exceptions to logfiles and the backend log module. This extension sends them to [Sentry](https://sentry.io/),
-a SaaS/self-hosted application which aggregates them and informs you by mail. In Sentry you see a enriched error messages with
-stacktrace, HTTP headers and submitted request/form data.
+a SaaS/self-hosted application which aggregates them and informs you by mail. In Sentry you see a error messages with
+additional information like stacktrace, HTTP headers and submitted request/form data.
 
 ## Technical decisions
 
@@ -25,12 +25,21 @@ to send us a crate of beer and we will make a new TER release.
 
 ## Configuration
 
+**File: system/additional.php**
 ```php
-// Extension Configuration
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client']['dsn'] = 'http://public_key@your-sentry-server.com/project-id';
-
-// LocalConfiguration.php (New since 3.0!!!)
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'Networkteam\SentryClient\ProductionExceptionHandler';
+if (TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
+    // Register exception handler
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
+    // Forward log messages to Sentry
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
+        \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
+            \Networkteam\SentryClient\SentryLogWriter::class => [],
+        ],
+    ];
+    // Set sentry/sentry options
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options']['server_name'] = 'web3';
+}
 ```
 
 ### Environment variables
@@ -43,25 +52,11 @@ SetEnv SENTRY_RELEASE 1.0.7
 SetEnv SENTRY_ENVIRONMENT Staging
 ```
 
-### LogWriter
-
-The extension comes with a LogWriter which forwards messages to Sentry which normally are just logged.
-
-```php
-// File: system/additional.php
-$GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['writerConfiguration'] = [
-    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
-        \Networkteam\SentryClient\SentryLogWriter::class => [],
-    ]
-];
-```
-
 ### Feature Toggles
 
 * Ignore database connection errors (they should better be handled by a monitoring system)
 * Report user information: Select one of `none` | `userid`
 * Ignore exception message regular expression
-* LogWriter Loglevel: If set, log messages are reported to Sentry
 * Ignore LogWriter Components
 
 ### Request ID
