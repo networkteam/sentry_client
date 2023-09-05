@@ -32,7 +32,7 @@ class SentryService
         }
 
         $options = [
-            'dsn' => ConfigurationService::getDsn(),
+            'dsn' => $dsn,
             'release' => ConfigurationService::getRelease(),
             'environment' => ConfigurationService::getEnvironment(),
             'in_app_include' => [Environment::getExtensionsPath()],
