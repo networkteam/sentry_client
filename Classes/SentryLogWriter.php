@@ -79,7 +79,9 @@ class SentryLogWriter extends AbstractWriter
             $stacktrace = $event->getStacktrace();
             if ($stacktrace instanceof Stacktrace) {
                 foreach($stacktrace->getFrames() as $no => $frame) {
-                    if (str_starts_with($frame->getFunctionName() ?? '', 'Psr\Log\AbstractLogger::')) {
+                    if (str_starts_with($frame->getFunctionName() ?? '', 'Psr\Log\AbstractLogger::')
+                        || str_starts_with($frame->getFunctionName() ?? '', 'TYPO3\CMS\Core\Log\Logger::')
+                    ) {
                         $stacktraceBeforeLogCall = new Stacktrace(array_slice($stacktrace->getFrames(), 0, $no));
                         $event->setStacktrace($stacktraceBeforeLogCall);
                         break;
