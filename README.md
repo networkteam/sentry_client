@@ -46,9 +46,9 @@ SetEnv SENTRY_ENVIRONMENT Staging
 ### LogWriter
 
 The extension comes with a LogWriter which forwards messages to Sentry which normally are just logged.
-You can enable it in EM or configure it for specific components:
 
 ```php
+// File: system/additional.php
 $GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['writerConfiguration'] = [
     \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
         \Networkteam\SentryClient\SentryLogWriter::class => [],

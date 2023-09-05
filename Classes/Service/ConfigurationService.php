@@ -19,8 +19,6 @@ class ConfigurationService
 
     const SHOW_EVENT_ID = 'showEventId';
 
-    const LOGWRITER_LOGLEVEL = 'logWriterLogLevel';
-
     const LOGWRITER_COMPONENT_IGNORELIST = 'logWriterComponentIgnorelist';
 
     const DISABLE_DATABASE_LOG = 'disableDatabaseLogging';
@@ -75,11 +73,6 @@ class ConfigurationService
     public static function showEventId(): bool
     {
         return (bool)self::getExtensionConfiguration(self::SHOW_EVENT_ID);
-    }
-
-    public static function getLogWriterLevel(): string
-    {
-        return (string)self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
     }
 
     /**

@@ -10,8 +10,6 @@ reportDatabaseConnectionErrors = 0
 release =
 # cat=Sentry/; type=boolean; label=Show Event id
 showEventId = 1
-# cat=Sentry/; type=options[,warning,error]; label=LogWriter level: The LogWriter reports errors which are normally just logged. This is an experimental feature.
-logWriterLogLevel =
 # cat=Sentry/; type=array; label=LogWriter component ignorelist: Comma separated list of LogRecord components which should not be reported. Example: TYPO3.CMS.Frontend.Controller.NoisyController
 logWriterComponentIgnorelist =
 # cat=Sentry/; type=boolean; label=Disable database logging: TYPO3 logs exceptions to the database and to a log file. With this you can disable the database logging.
