@@ -37,7 +37,7 @@ if (TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
         ],
     ];
     // Set sentry/sentry options
-    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options']['server_name'] = 'web3';
+    // $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options']['server_name'] = 'web3';
 }
 ```
 
@@ -83,6 +83,19 @@ https://github.com/networkteam/sentry_client
 There is a Slack channel #ext-sentry_client
 
 ## Changelog
+
+### 5.0.0
+
+* New option "disableDatabaseLogging": When enabled, exceptions are not written to database table sys_log
+* Introduce Sentry Integrations
+* Allow passing sentry/sentry options via `EXTCONF`
+* Ignore exceptions, that are ignore in TYPO3 core
+* Use `sentry/sentry` instead of `sentry/sdk` (Thanks to @derhansen)
+* !!! Option "logWriterLogLevel" removed. LogWriter needs to be configured in `system/additional.php`
+* !!! Option "messageBlacklistRegex" renamed to "ignoreMessageRegex"
+* !!! Option "logWriterComponentBlacklist" renamed to "logWriterComponentIgnorelist"
+* !!! Drop support for TYPO3 v10
+* !!! Drop support for non-composer usage
 
 ### 4.2.0
 
