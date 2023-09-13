@@ -1,3 +1,7 @@
+includes:
+  - phpstan-baseline.neon
+  - vendor/saschaegerer/phpstan-typo3/extension.neon
+
 parameters:
   # 0: basic checks
   # 1: possibly undefined variable, ...
@@ -8,12 +12,10 @@ parameters:
   # 6: check for missing typehints
   # 7: report partially wrong union types
   # 8: report calling methods and accessing properties on nullable types
-  level: 6
+  level: 8
 
   paths:
     - Classes
     - ext_localconf.php
 
-  reportUnmatchedIgnoredErrors: false
-  ignoreErrors:
-    - '#parameter \$contentObjectConfiguration with no value type specified in iterable type array#'
+  reportUnmatchedIgnoredErrors: true

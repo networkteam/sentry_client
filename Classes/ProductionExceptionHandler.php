@@ -3,14 +3,18 @@
 namespace Networkteam\SentryClient;
 
 use Networkteam\SentryClient\Service\ConfigurationService;
+use Networkteam\SentryClient\Service\SentryService;
 use Sentry\EventId;
 
 class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExceptionHandler
 {
-    /**
-     * @var EventId
-     */
-    protected $eventId;
+    protected ?EventId $eventId = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        SentryService::inititalize();
+    }
 
     /**
      * @param \Throwable $exception The throwable object.
@@ -18,7 +22,10 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
      */
     public function handleException(\Throwable $exception): void
     {
-        $this->eventId = Client::captureException($exception);
+        $ignoredCodes = array_merge(self::IGNORED_EXCEPTION_CODES, self::IGNORED_HMAC_EXCEPTION_CODES);
+        if (!in_array($exception->getCode(), $ignoredCodes, true)) {
+            $this->eventId = Client::captureException($exception);
+        }
         parent::handleException($exception);
     }
 
@@ -34,5 +41,17 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
             return sprintf('%s Event: %s', parent::getTitle($exception), $this->eventId);
         }
         return parent::getTitle($exception);
+    }
+
+    /**
+     * Writes an exception in the sys_log table
+     */
+    protected function writeLog(string $logMessage)
+    {
+        if (SentryService::isEnabled() && ConfigurationService::shouldDisableDatabaseLogging()) {
+            return;
+        }
+
+        parent::writeLog($logMessage);
     }
 }

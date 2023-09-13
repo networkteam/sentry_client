@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Networkteam\SentryClient\Service;
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -14,34 +13,31 @@ class ConfigurationService
 
     const USER_INFORMATION_NONE = 'none';
 
-    const USER_INFORMATION_USERNAMEEMAIL = 'usernameandemail';
-
-    const MESSAGE_BLACKLIST_REGEX = 'messageBlacklistRegex';
+    const IGNORE_MESSAGE_REGEX = 'ignoreMessageRegex';
 
     const REPORT_DATABASE_CONNECTION_ERRORS = 'reportDatabaseConnectionErrors';
 
     const SHOW_EVENT_ID = 'showEventId';
 
-    const LOGWRITER_LOGLEVEL = 'logWriterLogLevel';
+    const LOGWRITER_COMPONENT_IGNORELIST = 'logWriterComponentIgnorelist';
 
-    const LOGWRITER_COMPONENT_BLACKLIST = 'logWriterComponentBlacklist';
+    const DISABLE_DATABASE_LOG = 'disableDatabaseLogging';
 
-    /**
-     * @param string $path
-     * @return mixed
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException
-     * @throws \TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException
-     */
-    protected static function getExtensionConfiguration(string $path)
+    protected static function getExtensionConfiguration(string $path): mixed
     {
-        /** @var ExtensionConfiguration $extensionConfiguration */
-        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
-        return $extensionConfiguration->get('sentry_client', $path);
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client'][$path] ?? null;
+    }
+
+    public static function getExtConf(): ?array
+    {
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client'] ?? null;
     }
 
     public static function getDsn(): ?string
     {
-        return getenv('SENTRY_DSN') ?: self::getExtensionConfiguration(self::DSN);
+        $dsn = getenv('SENTRY_DSN') ?: self::getExtensionConfiguration(self::DSN);
+
+        return !empty($dsn) ? $dsn : null;
     }
 
     public static function getEnvironment(): string
@@ -56,7 +52,7 @@ class ConfigurationService
 
     protected static function getNormalizedApplicationContext(): string
     {
-        return preg_replace("/[^a-zA-Z0-9]/", "-", (string)Environment::getContext());
+        return preg_replace("/[^a-zA-Z0-9]/", "-", Environment::getContext()->__toString());
     }
 
     public static function getReportUserInformation(): string
@@ -64,9 +60,9 @@ class ConfigurationService
         return self::getExtensionConfiguration(self::REPORT_USER_INFORMATION);
     }
 
-    public static function getMessageBlacklistRegex(): ?string
+    public static function getIgnoreMessageRegex(): ?string
     {
-        return self::getExtensionConfiguration(self::MESSAGE_BLACKLIST_REGEX);
+        return self::getExtensionConfiguration('messageBlacklistRegex') ?? self::getExtensionConfiguration(self::IGNORE_MESSAGE_REGEX);
     }
 
     public static function reportDatabaseConnectionErrors(): bool
@@ -79,13 +75,17 @@ class ConfigurationService
         return (bool)self::getExtensionConfiguration(self::SHOW_EVENT_ID);
     }
 
-    public static function getLogWriterLevel(): string
+    /**
+     * @return string[]
+     */
+    public static function getLogWriterComponentIgnorelist(): array
     {
-        return (string)self::getExtensionConfiguration(self::LOGWRITER_LOGLEVEL);
+        $ignoreList = self::getExtensionConfiguration('logWriterComponentBlacklist') ?? self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_IGNORELIST);
+        return GeneralUtility::trimExplode(',', $ignoreList, true);
     }
 
-    public static function getLogWriterComponentBlacklist(): string
+    public static function shouldDisableDatabaseLogging(): bool
     {
-        return (string)self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_BLACKLIST);
+        return (bool)self::getExtensionConfiguration(self::DISABLE_DATABASE_LOG);
     }
 }

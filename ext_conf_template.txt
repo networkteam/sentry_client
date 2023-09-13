@@ -1,16 +1,16 @@
 # cat=Sentry/; type=text; label=DSN: http://public_key@your-sentry-server.com/project-id, you can also use the SENTRY_DSN environment variable
 dsn =
-# cat=Sentry/; type=options[none,userid,usernameandemail]; label=Report user information
+# cat=Sentry/; type=options[none,userid]; label=Report user information
 reportUserInformation = userid
-# cat=Sentry/; type=text; label=Exception/LogWriter message blacklist regex: Use it to not report them. Example: /an exception message/
-messageBlacklistRegex =
+# cat=Sentry/; type=text; label=Exception/LogWriter message ignorelist regex: Use it to not report them. Example: /an exception message/
+ignoreMessageRegex =
 # cat=Sentry/; type=boolean; label=Report database connection errors: Such service outages should better be handled by a monitoring system
 reportDatabaseConnectionErrors = 0
 # cat=Sentry/; type=string; label=Release: See https://docs.sentry.io/platforms/php/configuration/options/#release, you can also use the SENTRY_RELEASE environment variable
 release =
 # cat=Sentry/; type=boolean; label=Show Event id
 showEventId = 1
-# cat=Sentry/; type=options[,warning,error]; label=LogWriter level: The LogWriter reports errors which are normally just logged. This is an experimental feature.
-logWriterLogLevel =
-# cat=Sentry/; type=array; label=LogWriter component blacklist: Comma separated list of LogRecord components which should not be reported. Example: TYPO3.CMS.Frontend.Controller.NoisyController
-logWriterComponentBlacklist =
+# cat=Sentry/; type=array; label=LogWriter component ignorelist: Comma separated list of LogRecord components which should not be reported. Example: TYPO3.CMS.Frontend.Controller.NoisyController
+logWriterComponentIgnorelist =
+# cat=Sentry/; type=boolean; label=Disable database logging: TYPO3 logs exceptions to the database and to a log file. With this you can disable the database logging.
+disableDatabaseLogging = 0

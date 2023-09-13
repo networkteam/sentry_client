@@ -22,10 +22,11 @@
     }
   ],
   "require": {
-    "typo3/cms-backend": "^10.4.11 || ^11.0 || ^12.0",
-    "typo3/cms-core": "^10.4.11 || ^11.0 || ^12.0",
-    "typo3/cms-frontend": "^10.4.11 || ^11.0 || ^12.0",
-    "sentry/sdk": "^3.1.0"
+    "php": "^8.0",
+    "typo3/cms-backend": "^11.0 || ^12.0",
+    "typo3/cms-core": "^11.0 || ^12.0",
+    "typo3/cms-frontend": "^11.0 || ^12.0",
+    "sentry/sentry": "^3.21"
   },
   "extra": {
     "typo3/cms": {
@@ -44,7 +45,8 @@
   "config": {
     "allow-plugins": {
       "typo3/cms-composer-installers": true,
-      "typo3/class-alias-loader": true
+      "typo3/class-alias-loader": true,
+      "php-http/discovery": true
     }
   },
   "require-dev": {

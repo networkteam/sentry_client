@@ -2,12 +2,11 @@
 
 ![ci](https://github.com/networkteam/sentry_client/actions/workflows/ci.yml/badge.svg)
 ![Latest release on GitHub](https://img.shields.io/github/v/release/networkteam/sentry_client?logo=github)
-![Latest TER release](https://shields.io/endpoint?url=https://typo3-badges.dev/badge/sentry_client/version/shields)
 ![Downloads per month](https://img.shields.io/packagist/dm/networkteam/sentry-client?style=plastic)
 
 TYPO3 logs error messages and exceptions to logfiles and the backend log module. This extension sends them to [Sentry](https://sentry.io/),
-a SaaS/self-hosted application which aggregates them and informs you by mail. In Sentry you see a enriched error messages with
-stacktrace, HTTP headers and submitted request/form data.
+a SaaS/self-hosted application which aggregates them and informs you by mail. In Sentry you see a error messages with
+additional information like stacktrace, HTTP headers and submitted request/form data.
 
 ## Technical decisions
 
@@ -17,23 +16,30 @@ TYPO3 throws a lot of PHP Notices and they are not really interesting in product
 
 ## Installation
 
-The preferred way is with Composer:
-
 ```bash
 $ composer require networkteam/sentry-client
 ```
 
-The [TER version](http://typo3.org/extensions/repository/view/sentry_client) includes some composer dependencies locally,
-which may lead to problems in the future (one package with multiple version in the project).
+The [TER version](https://typo3.org/extensions/repository/view/sentry_client) will not receive updates anymore. Feel free
+to send us a crate of beer and we will make a new TER release.
 
 ## Configuration
 
+**File: system/additional.php**
 ```php
-// Extension Configuration
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sentry_client']['dsn'] = 'http://public_key@your-sentry-server.com/project-id';
-
-// LocalConfiguration.php (New since 3.0!!!)
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = 'Networkteam\SentryClient\ProductionExceptionHandler';
+if (TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
+    // Register exception handler
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
+    // Forward log messages to Sentry
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
+        \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
+            \Networkteam\SentryClient\SentryLogWriter::class => [],
+        ],
+    ];
+    // Set sentry/sentry options
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options']['server_name'] = 'web3';
+}
 ```
 
 ### Environment variables
@@ -46,26 +52,12 @@ SetEnv SENTRY_RELEASE 1.0.7
 SetEnv SENTRY_ENVIRONMENT Staging
 ```
 
-### LogWriter
-
-The extension comes with a LogWriter which forwards messages to Sentry which normally are just logged.
-You can enable it in EM or configure it for specific components:
-
-```php
-$GLOBALS['TYPO3_CONF_VARS']['LOG']['YourVendor]['YourExtension]['Controller']['writerConfiguration'] = [
-    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
-        \Networkteam\SentryClient\SentryLogWriter::class => [],
-    ]
-];
-```
-
 ### Feature Toggles
 
 * Ignore database connection errors (they should better be handled by a monitoring system)
-* Report user information: Select one of `none` | `userid` | `usernameandemail`
-* Blacklist exception message regular expression
-* LogWriter Loglevel: If set, log messages are reported to Sentry
-* LogWriter Component blacklist
+* Report user information: Select one of `none` | `userid`
+* Ignore exception message regular expression
+* Ignore LogWriter Components
 
 ### Request ID
 
@@ -108,7 +100,7 @@ There is a Slack channel #ext-sentry_client
 ### 4.0.0
 
 * Add stacktrace to LogWriter messages for message grouping in Sentry
-* Add LogWriter component blacklist
+* Add LogWriter component ignorelist
 * Add v11.5 support
 * Drop v9.5 support
 
