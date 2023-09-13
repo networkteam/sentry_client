@@ -61,7 +61,8 @@ class SentryLogWriter extends AbstractWriter
 
         $componentIgnorelist = array_merge([
             'TYPO3.CMS.Frontend.ContentObject.Exception.ProductionExceptionHandler',
-            'TYPO3.CMS.Core.Error.ErrorHandler'
+            'TYPO3.CMS.Core.Error.ErrorHandler',
+            'Networkteam.SentryClient.ProductionExceptionHandler'
         ], ConfigurationService::getLogWriterComponentIgnorelist());
 
         foreach ($componentIgnorelist as $componentInIgnorelist) {
