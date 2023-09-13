@@ -30,7 +30,6 @@ to send us a crate of beer and we will make a new TER release.
 if (TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
     // Register exception handler
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
     // Forward log messages to Sentry
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
         \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
