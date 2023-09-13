@@ -41,6 +41,9 @@ class SentryService
             'before_send' => function (Event $event): Event {
                 return SentryLogWriter::cleanupStacktrace($event);
             },
+            'prefixes' => [
+                Environment::getProjectPath()
+            ],
             'default_integrations' => false,
             'error_types' => E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED,
             'integrations' => [
