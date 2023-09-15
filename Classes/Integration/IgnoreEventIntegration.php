@@ -14,6 +14,7 @@ use Sentry\State\Scope;
 use TYPO3\CMS\Core\Error\Http\BadRequestException;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
+use TYPO3\CMS\Core\Http\PropagateResponseException;
 
 final class IgnoreEventIntegration implements IntegrationInterface
 {
@@ -42,6 +43,7 @@ final class IgnoreEventIntegration implements IntegrationInterface
             if (in_array($exception->getType(), [
                     BadRequestException::class,
                     ImmediateResponseException::class,
+                    PropagateResponseException::class,
                     PageNotFoundException::class
                 ]) ||
                 $this->shouldIgnoreMessage($exception->getValue()) ||
