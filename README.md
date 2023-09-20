@@ -94,6 +94,7 @@ There is a Slack channel #ext-sentry_client
 * !!! Option "logWriterLogLevel" removed. LogWriter needs to be configured in `system/additional.php`
 * !!! Option "messageBlacklistRegex" renamed to "ignoreMessageRegex"
 * !!! Option "logWriterComponentBlacklist" renamed to "logWriterComponentIgnorelist"
+* !!! The old option names still work
 * !!! Drop support for TYPO3 v10
 * !!! Drop support for non-composer usage
 
