@@ -57,7 +57,7 @@ class ConfigurationService
 
     public static function getReportUserInformation(): string
     {
-        return self::getExtensionConfiguration(self::REPORT_USER_INFORMATION);
+        return self::getExtensionConfiguration(self::REPORT_USER_INFORMATION) ?? '';
     }
 
     public static function getIgnoreMessageRegex(): ?string
