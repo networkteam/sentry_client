@@ -11,6 +11,11 @@ parameters:
 			path: Classes/ProductionExceptionHandler.php
 
 		-
+			message: "#^Method Networkteam\\\\SentryClient\\\\SentryLogWriter\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Classes/SentryLogWriter.php
+
+		-
 			message: "#^Method Networkteam\\\\SentryClient\\\\Service\\\\ConfigurationService\\:\\:getExtConf\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Classes/Service/ConfigurationService.php
