@@ -20,6 +20,12 @@ class SentryLogWriter extends AbstractWriter
 
     protected const SOURCE_IDENTIFIER = 'logwriter';
 
+    public function __construct(array $options = [])
+    {
+        SentryService::inititalize();
+        parent::__construct($options);
+    }
+
     /**
      * Forwards the log record to Sentry
      *
