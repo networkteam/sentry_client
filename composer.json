@@ -26,12 +26,14 @@
     "typo3/cms-backend": "^11.0 || ^12.0",
     "typo3/cms-core": "^11.0 || ^12.0",
     "typo3/cms-frontend": "^11.0 || ^12.0",
-    "sentry/sentry": "^3.21"
+    "sentry/sentry": "^4.6"
   },
   "extra": {
     "typo3/cms": {
       "extension-key": "sentry_client",
-      "cms-package-dir": "{$vendor-dir}/typo3/cms"
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "app-dir": ".Build",
+      "web-dir": ".Build/Web"
     }
   },
   "autoload": {
@@ -39,22 +41,21 @@
       "Networkteam\\SentryClient\\": "Classes/"
     }
   },
-  "replace": {
-    "typo3-ter/sentry-client": "self.version"
-  },
   "config": {
     "allow-plugins": {
       "typo3/cms-composer-installers": true,
-      "typo3/class-alias-loader": true,
-      "php-http/discovery": true
-    }
+      "typo3/class-alias-loader": true
+    },
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "sort-packages": true
   },
   "require-dev": {
     "saschaegerer/phpstan-typo3": "^1.1"
   },
   "scripts": {
     "phpstan": [
-      "phpstan analyse -c phpstan.neon"
+      "phpstan analyse ."
     ]
   }
 }

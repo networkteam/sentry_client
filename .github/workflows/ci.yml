@@ -42,4 +42,4 @@ jobs:
           composer require typo3/cms-core:^$typo3 typo3/cms-frontend:^$typo3 typo3/cms-backend:^$typo3
 
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse
+        run: composer phpstan
