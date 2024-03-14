@@ -25,20 +25,26 @@ to send us a crate of beer and we will make a new TER release.
 
 ## Configuration
 
-**File: system/additional.php**
+**File: system/settings.php or system/additional.php**
+
+Register the exception handlers.
 ```php
-if (TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
-    // Register exception handler
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
-    // Forward log messages to Sentry
-    $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
-        \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
-            \Networkteam\SentryClient\SentryLogWriter::class => [],
-        ],
-    ];
-    // Set sentry/sentry options
-    // $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options']['server_name'] = 'web3';
-}
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = Networkteam\SentryClient\ProductionExceptionHandler::class;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = Networkteam\SentryClient\DebugExceptionHandler::class;
+```
+The DebugExceptionHandler is also used in production environment when `SYS/displayErrors` is enabled and your IP matches `SYS/devIPmask`.
+
+Optional: Forward non-exceptional errors to Sentry, that normally are logged only. Consider using LogLevel::WARN
+```php
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
+    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
+        \Networkteam\SentryClient\SentryLogWriter::class => [],
+    ],
+];
+```
+Optional: Set sentry/sentry options (https://docs.sentry.io/platforms/php/configuration/options/)
+```php
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry_client']['options']['server_name'] = 'web3';
 ```
 
 ### Environment variables
@@ -58,10 +64,6 @@ SetEnv SENTRY_ENVIRONMENT Staging
 * Ignore exception message regular expression
 * Ignore LogWriter Components
 
-### Request ID
-
-If the web server has set a request ID header `X-Request-Id`, this is transmitted as a tag to trace errors to logs.
-
 ## How to test if the extension works?
 
 ```typescript
@@ -73,6 +75,10 @@ page.20 {
 ```
 This triggers an error that will be reported.
 
+### Request ID
+
+If the web server has set a request ID header `X-Request-Id`, this is transmitted as a tag to trace errors to logs.
+
 ## Issue tracker
 
 This extension is managed on GitHub. Feel free to get in touch at
@@ -83,6 +89,10 @@ https://github.com/networkteam/sentry_client
 There is a Slack channel #ext-sentry_client
 
 ## Changelog
+
+### 5.1.0
+
+* Use sentry/sentry ^4.6
 
 ### 5.0.0
 
