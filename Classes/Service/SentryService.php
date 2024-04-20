@@ -37,6 +37,9 @@ class SentryService
             'environment' => ConfigurationService::getEnvironment(),
             'in_app_include' => [Environment::getExtensionsPath()],
             'http_proxy' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'] ?? null,
+            'http_ssl_verify_peer' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['verify'] ?? true,
+            'http_timeout' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['http_timeout'] ?? 5,
+            'http_connect_timeout' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['connect_timeout'] ?? 2,
             'attach_stacktrace' => true,
             'before_send' => function (Event $event): Event {
                 return SentryLogWriter::cleanupStacktrace($event);
