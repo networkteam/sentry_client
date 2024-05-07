@@ -5,6 +5,7 @@ namespace Networkteam\SentryClient;
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\SentryService;
 use Networkteam\SentryClient\Trait\IgnoreMessage;
+use Sentry\Breadcrumb;
 use Sentry\Event;
 use Sentry\Stacktrace;
 use Sentry\State\Scope;
@@ -36,6 +37,12 @@ class SentryLogWriter extends AbstractWriter
         if (SentryService::isEnabled()
             && $this->shouldHandleLogMessage($record)
         ) {
+            $data = $record->getData();
+            if (isset($data['exception']) && $data['exception'] instanceof \Throwable) {
+                $this->writeException($record);
+                return $this;
+            }
+
             withScope(function (Scope $scope) use ($record): void {
                 $scope->setExtra('component', $record->getComponent());
                 if ($record->getData()) {
@@ -46,7 +53,7 @@ class SentryLogWriter extends AbstractWriter
                     $record->getMessage(),
                     $record->getComponent()
                 ]);
-                
+
                 $message = $record->getMessage();
                 if (method_exists($this, 'interpolate')) {
                     $message = $this->interpolate($message, $record->getData());
@@ -57,6 +64,36 @@ class SentryLogWriter extends AbstractWriter
         }
 
         return $this;
+    }
+
+    /**
+     * Report a log record with an 'exception' object in its data.
+     *
+     * Exception objects in Sentry data properties do not get serialized
+     * and thus get lost.
+     * To keep them and their stacktrace, we send it as exception to Sentry.
+     * The log message is kept as breadcrumb.
+     *
+     * TYPO3 scheduler logs such messages when tasks fail.
+     */
+    protected function writeException(LogRecord $record): void
+    {
+        $data = $record->getData();
+        $exception = $data['exception'];
+        unset($data['exception']);
+
+        withScope(function (Scope $scope) use ($data, $exception, $record): void {
+            $scope->setExtra('component', $record->getComponent());
+            $scope->setExtra('data', $data);
+
+            $message = $record->getMessage();
+            if (method_exists($this, 'interpolate')) {
+                $message = $this->interpolate($message, $record->getData());
+            }
+            $scope->addBreadcrumb(new Breadcrumb('error', 'default', 'log message', $message, []));
+
+            Client::captureException($exception);
+        });
     }
 
     protected function shouldHandleLogMessage(LogRecord $logRecord): bool
