@@ -31,12 +31,19 @@ class SentryService
             return false;
         }
 
+        $httpProxy = null;
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])) {
+            $httpProxy = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'];
+        } elseif (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])) {
+            $httpProxy = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
+        }
+
         $options = [
             'dsn' => $dsn,
             'release' => ConfigurationService::getRelease(),
             'environment' => ConfigurationService::getEnvironment(),
             'in_app_include' => [Environment::getExtensionsPath()],
-            'http_proxy' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'] ?? null,
+            'http_proxy' => $httpProxy,
             'attach_stacktrace' => true,
             'before_send' => function (Event $event): Event {
                 return SentryLogWriter::cleanupStacktrace($event);
