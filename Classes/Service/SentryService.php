@@ -31,12 +31,19 @@ class SentryService
             return false;
         }
 
+        $httpProxy = null;
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'])) {
+            $httpProxy = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy']['http'];
+        } elseif (isset($GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'])) {
+            $httpProxy = $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'];
+        }
+
         $options = [
             'dsn' => $dsn,
             'release' => ConfigurationService::getRelease(),
             'environment' => ConfigurationService::getEnvironment(),
             'in_app_include' => [Environment::getExtensionsPath()],
-            'http_proxy' => $GLOBALS['TYPO3_CONF_VARS']['HTTP']['proxy'] ?? null,
+            'http_proxy' => $httpProxy,
             'http_ssl_verify_peer' => (bool)($GLOBALS['TYPO3_CONF_VARS']['HTTP']['verify'] ?? true),
             'http_timeout' => (int)($GLOBALS['TYPO3_CONF_VARS']['HTTP']['http_timeout'] ?? 5),
             'http_connect_timeout' => (int)($GLOBALS['TYPO3_CONF_VARS']['HTTP']['connect_timeout'] ?? 2),
