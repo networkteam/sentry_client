@@ -81,7 +81,7 @@ class ConfigurationService
     public static function getLogWriterComponentIgnorelist(): array
     {
         $ignoreList = self::getExtensionConfiguration('logWriterComponentBlacklist') ?? self::getExtensionConfiguration(self::LOGWRITER_COMPONENT_IGNORELIST);
-        return GeneralUtility::trimExplode(',', $ignoreList, true);
+        return GeneralUtility::trimExplode(',', $ignoreList ?? '', true);
     }
 
     public static function shouldDisableDatabaseLogging(): bool
