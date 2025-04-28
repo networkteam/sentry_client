@@ -25,8 +25,8 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
             throw $exception;
         }
 
-        $eventId = GeneralUtility::makeInstance(Client::class)->captureException($exception);
         $errorMessage = parent::handle($exception, $contentObject, $contentObjectConfiguration);
+        $eventId = GeneralUtility::makeInstance(Client::class)->captureException($exception);
 
         if (ConfigurationService::showEventId()) {
             return sprintf('%s Event: %s', $errorMessage, $eventId);
