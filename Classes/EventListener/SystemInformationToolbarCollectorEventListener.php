@@ -5,7 +5,7 @@ namespace Networkteam\SentryClient\EventListener;
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\SentryService;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
-use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
+use TYPO3\CMS\Backend\Toolbar\InformationStatus;
 use TYPO3\CMS\Core\Localization\LanguageService;
 
 class SystemInformationToolbarCollectorEventListener
@@ -21,7 +21,7 @@ class SystemInformationToolbarCollectorEventListener
             'Sentry',
             $label,
             'tx-sentryclient-sentry-glyph-light',
-            $isActive ? InformationStatus::STATUS_OK : InformationStatus::STATUS_ERROR
+            $isActive ? InformationStatus::OK : InformationStatus::ERROR
         );
 
         if ($isActive) {
