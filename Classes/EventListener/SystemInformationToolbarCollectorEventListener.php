@@ -5,7 +5,8 @@ namespace Networkteam\SentryClient\EventListener;
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\SentryService;
 use TYPO3\CMS\Backend\Backend\Event\SystemInformationToolbarCollectorEvent;
-use TYPO3\CMS\Backend\Toolbar\InformationStatus;
+use TYPO3\CMS\Backend\Toolbar\Enumeration\InformationStatus;
+use TYPO3\CMS\Backend\Toolbar\InformationStatus as InformationStatusEnum;
 use TYPO3\CMS\Core\Localization\LanguageService;
 
 class SystemInformationToolbarCollectorEventListener
@@ -21,8 +22,9 @@ class SystemInformationToolbarCollectorEventListener
             'Sentry',
             $label,
             'tx-sentryclient-sentry-glyph-light',
-            $isActive ? InformationStatus::OK : InformationStatus::ERROR
-        );
+            $isActive
+                ? (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::OK : InformationStatus::STATUS_OK)
+                : (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::ERROR : InformationStatus::STATUS_ERROR)        );
 
         if ($isActive) {
             $release = ConfigurationService::getRelease();
