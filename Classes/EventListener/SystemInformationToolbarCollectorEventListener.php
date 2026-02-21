@@ -24,7 +24,7 @@ class SystemInformationToolbarCollectorEventListener
             'tx-sentryclient-sentry-glyph-light',
             $isActive
                 ? (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::OK : InformationStatus::STATUS_OK)
-                : (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::ERROR : InformationStatus::STATUS_ERROR)        );
+                : (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::ERROR : InformationStatus::STATUS_ERROR));
 
         if ($isActive) {
             $release = ConfigurationService::getRelease();
