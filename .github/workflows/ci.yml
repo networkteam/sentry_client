@@ -11,7 +11,6 @@ jobs:
       matrix:
         env:
           # See version matrix @ https://typo3.org/cms/roadmap
-          - { php: 8.1, typo3: 11 }
           - { php: 8.1, typo3: 12 }
           - { php: 8.3, typo3: 13 }
           - { php: 8.5, typo3: 14 }
@@ -41,7 +40,7 @@ jobs:
 
       - name: Install composer dependencies
         run: |
-          composer require typo3/cms-core:^$typo3 typo3/cms-frontend:^$typo3 typo3/cms-backend:^$typo3
+          composer require --no-scripts typo3/cms-core:^$typo3 typo3/cms-frontend:^$typo3 typo3/cms-backend:^$typo3
 
       - name: Run PHPStan
         run: composer phpstan

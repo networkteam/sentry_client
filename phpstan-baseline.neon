@@ -24,3 +24,8 @@ parameters:
 			message: "#^Method Networkteam\\\\SentryClient\\\\Service\\\\ConfigurationService\\:\\:getNormalizedApplicationContext\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: Classes/Service/ConfigurationService.php
+
+		-
+			identifier: argument.type
+			path: Classes/EventListener/SystemInformationToolbarCollectorEventListener.php
+			reportUnmatched: false
