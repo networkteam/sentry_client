@@ -1,3 +1,5 @@
 /.Build
 /composer.lock
 /.idea
+/var
+/devbox.d
