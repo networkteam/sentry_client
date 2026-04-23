@@ -22,7 +22,7 @@ class SystemInformationToolbarCollectorEventListener
             'Sentry',
             $label,
             'tx-sentryclient-sentry-glyph-light',
-            $isActive
+            $isActive // @phpstan-ignore argument.type
                 ? (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::OK : InformationStatus::STATUS_OK)
                 : (enum_exists(InformationStatusEnum::class) ? InformationStatusEnum::ERROR : InformationStatus::STATUS_ERROR)
         );

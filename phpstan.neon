@@ -3,6 +3,10 @@ includes:
   - .Build/vendor/saschaegerer/phpstan-typo3/extension.neon
 
 parameters:
+  stubFiles:
+    - Build/phpstan/stubs/BackendToolbarEnumerationInformationStatus.php
+    - Build/phpstan/stubs/BackendToolbarInformationStatus.php
+
   # 0: basic checks
   # 1: possibly undefined variable, ...
   # 2: unknown methods checked on all expressions
@@ -15,3 +19,4 @@ parameters:
   level: 8
 
   reportUnmatchedIgnoredErrors: true
+  treatPhpDocTypesAsCertain: false

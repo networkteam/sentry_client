@@ -47,10 +47,7 @@ class SentryLogWriter extends AbstractWriter
                     $record->getComponent()
                 ]);
                 
-                $message = $record->getMessage();
-                if (method_exists($this, 'interpolate')) {
-                    $message = $this->interpolate($message, $record->getData());
-                }
+                $message = $this->interpolate($record->getMessage(), $record->getData());
 
                 Client::captureMessage($message, $record->getLevel());
             });

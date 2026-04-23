@@ -18,7 +18,7 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Frontend\ContentObject\Excep
      */
     public function handle(
         \Exception $exception,
-        AbstractContentObject $contentObject = null,
+        ?AbstractContentObject $contentObject = null,
         $contentObjectConfiguration = []
     ): string {
         if (Environment::getContext()->isDevelopment()) {
