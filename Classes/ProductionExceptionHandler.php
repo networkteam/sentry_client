@@ -2,9 +2,12 @@
 
 namespace Networkteam\SentryClient;
 
+use Networkteam\SentryClient\Event\BeforeSentryCaptureEvent;
 use Networkteam\SentryClient\Service\ConfigurationService;
 use Networkteam\SentryClient\Service\SentryService;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Sentry\EventId;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExceptionHandler
 {
@@ -23,9 +26,20 @@ class ProductionExceptionHandler extends \TYPO3\CMS\Core\Error\ProductionExcepti
     public function handleException(\Throwable $exception): void
     {
         $ignoredCodes = array_merge(self::IGNORED_EXCEPTION_CODES, self::IGNORED_HMAC_EXCEPTION_CODES);
+
         if (!in_array($exception->getCode(), $ignoredCodes, true)) {
-            $this->eventId = Client::captureException($exception);
+            $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+
+            $event = $eventDispatcher->dispatch(
+                new BeforeSentryCaptureEvent($exception)
+            );
+
+            if (!$event->isPropagationStopped()) {
+                $exceptionToSend = $event->getException();
+                $this->eventId = Client::captureException($exceptionToSend);
+            }
         }
+
         parent::handleException($exception);
     }
 

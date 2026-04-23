@@ -2,7 +2,10 @@
 
 namespace Networkteam\SentryClient;
 
+use Networkteam\SentryClient\Event\BeforeSentryCaptureEvent;
 use Networkteam\SentryClient\Service\SentryService;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class DebugExceptionHandler extends \TYPO3\CMS\Core\Error\DebugExceptionHandler
 {
@@ -18,7 +21,17 @@ class DebugExceptionHandler extends \TYPO3\CMS\Core\Error\DebugExceptionHandler
      */
     public function handleException(\Throwable $exception): void
     {
-        Client::captureException($exception);
+        $eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
+
+        $event = $eventDispatcher->dispatch(
+            new BeforeSentryCaptureEvent($exception)
+        );
+
+        if (!$event->isPropagationStopped()) {
+            $exceptionToSend = $event->getException();
+            Client::captureException($exceptionToSend);
+        }
+
         parent::handleException($exception);
     }
 }
