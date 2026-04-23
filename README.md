@@ -90,6 +90,24 @@ There is a Slack channel #ext-sentry_client
 
 ## Changelog
 
+### 6.0.0
+
+* Add TYPO3 v14 support
+* !!! Drop TYPO3 v11 support (EOL)
+
+### 5.2.1
+
+* Do not capture exceptions that TYPO3 Content Object Exception Handler is configured to re-throw via `config.contentObjectExceptionHandler.ignoreCodes`
+
+### 5.2.0
+
+* Add TYPO3 v13 support
+
+### 5.1.1
+
+* Use TYPO3 HTTP configuration (`verify`, `http_timeout`, `connect_timeout`) for Sentry HTTP client
+* Support both `[HTTP][proxy]` and `[HTTP][proxy][http]` proxy configuration formats
+
 ### 5.1.0
 
 * Use sentry/sentry ^4.6
