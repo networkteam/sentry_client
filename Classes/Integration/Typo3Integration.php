@@ -11,6 +11,7 @@ use Sentry\SentrySdk;
 use Sentry\State\Scope;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 
 final class Typo3Integration implements IntegrationInterface
@@ -38,14 +39,9 @@ final class Typo3Integration implements IntegrationInterface
     {
         $request = $this->getServerRequest();
         if ($request instanceof ServerRequestInterface) {
-            if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-                $event->setTag('request_type', 'frontend');
-                $this->setUrl($event, $request);
-            } elseif (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
-                $event->setTag('request_type', 'backend');
-                $this->setUrl($event, $request);
-            }
-        } elseif (Environment::isCli()) {
+            $this->setUrl($event, $request);
+            $event->setTag('request_type', $this->getRequestType($request));
+        } else {
             $event->setTag('request_type', 'cli');
         }
 
@@ -66,6 +62,19 @@ final class Typo3Integration implements IntegrationInterface
 
     protected function getServerRequest(): ?ServerRequestInterface
     {
-        return $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (Environment::isCli()) {
+            return null;
+        }
+        return $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
+    }
+
+    private function getRequestType(ServerRequestInterface $request): string
+    {
+        try {
+            return ApplicationType::fromRequest($request)->value;
+        } catch (\RuntimeException $e) {
+            // ignore missing application type
+            return 'request';
+        }
     }
 }
