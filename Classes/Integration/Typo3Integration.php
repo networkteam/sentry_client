@@ -13,7 +13,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Information\Typo3Version;
 
-final class Typo3Integration implements IntegrationInterface
+class Typo3Integration implements IntegrationInterface
 {
     public function setupOnce(): void
     {
